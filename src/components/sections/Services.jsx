@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -25,15 +25,15 @@ const cardTones = [
 
 export default function Services() {
   const stackRef = useRef(null);
-  const pinStageRef = useRef(null);
   const cardsRef = useRef([]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     let ctx = null;
 
+    // Defer to next microtask so layout calculations & DOM references are 100% stable
     const timer = setTimeout(() => {
       const cards = cardsRef.current.filter(Boolean);
-      if (!cards.length || !stackRef.current || !pinStageRef.current) return;
+      if (!cards.length || !stackRef.current) return;
 
       gsap.registerPlugin(ScrollTrigger);
 
@@ -44,7 +44,7 @@ export default function Services() {
       const PEEK        = isMobile ? 10 : isTablet ? 18 : 24;
       const SCALE_STEP  = isMobile ? 0.02 : isTablet ? 0.03 : 0.038;
       const FLY_ROTATE  = isMobile ? -6  : isTablet ? -12  : -18;
-      const SCROLL_MULT = isMobile ? 0.4  : isTablet ? 0.5  : 0.6;
+      const SCROLL_MULT = isMobile ? 0.45 : isTablet ? 0.55 : 0.65;
 
       function stackPose(index) {
         return { y: index * PEEK, scale: 1 - index * SCALE_STEP };
@@ -57,6 +57,7 @@ export default function Services() {
             y: stackPose(i).y,
             scale: stackPose(i).scale,
             rotate: 0,
+            opacity: 1,
             transformOrigin: '50% 0%'
           });
         });
@@ -64,11 +65,12 @@ export default function Services() {
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: stackRef.current,
-            pin: pinStageRef.current,
             start: 'top top',
             end: () => `+=${cards.length * window.innerHeight * SCROLL_MULT}`,
+            pin: true,
             pinSpacing: true,
-            scrub: 0.8,
+            scrub: 0.7,
+            anticipatePin: 1,
             invalidateOnRefresh: true
           }
         });
@@ -79,9 +81,9 @@ export default function Services() {
           const behind = cards.slice(i + 1);
 
           tl.to(card, {
-            y: -window.innerHeight * 1.05,
+            y: -window.innerHeight * 1.1,
             rotate: FLY_ROTATE,
-            scale: 0.93,
+            scale: 0.9,
             opacity: 0,
             ease: 'power2.inOut',
             duration: 1
@@ -109,92 +111,90 @@ export default function Services() {
     <section
       id="services"
       ref={stackRef}
-      className="services-section relative"
+      className="services-section"
     >
-      <div ref={pinStageRef} className="w-full relative">
-        {/* Header */}
-        <div className="services-header">
-          <SectionHeading
-            eyebrow={servicesData.eyebrow}
-            title={servicesData.title}
-            subtitle={servicesData.subtitle}
-          />
-        </div>
+      {/* Header */}
+      <div className="services-header">
+        <SectionHeading
+          eyebrow={servicesData.eyebrow}
+          title={servicesData.title}
+          subtitle={servicesData.subtitle}
+        />
+      </div>
 
-        {/* Card Deck */}
-        <div className="stack__stage">
-          <div className="stack__deck">
-            {servicesData.services.map((service, idx) => {
-              const IconComponent = iconMap[service.icon] || Megaphone;
-              const tone = cardTones[idx % cardTones.length];
-              const formattedIndex = String(idx + 1).padStart(2, '0');
+      {/* Card Deck */}
+      <div className="stack__stage">
+        <div className="stack__deck">
+          {servicesData.services.map((service, idx) => {
+            const IconComponent = iconMap[service.icon] || Megaphone;
+            const tone = cardTones[idx % cardTones.length];
+            const formattedIndex = String(idx + 1).padStart(2, '0');
 
-              return (
-                <article
-                  key={service.id || idx}
-                  ref={el => (cardsRef.current[idx] = el)}
-                  className={`stack-card ${tone.bg} ${tone.text} ${tone.border}`}
-                >
-                  {/* ── Left Content Column ── */}
-                  <div className="card-content">
-                    {/* Top row: icon + badge + index */}
-                    <div className="card-top-row">
-                      <div className="card-icon-badge">
-                        <div className="card-icon-wrap">
-                          <IconComponent className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
-                        </div>
-                        <span className={`card-badge ${tone.badgeBg}`}>
-                          Kannur Office
-                        </span>
+            return (
+              <article
+                key={service.id || idx}
+                ref={el => (cardsRef.current[idx] = el)}
+                className={`stack-card ${tone.bg} ${tone.text} ${tone.border}`}
+              >
+                {/* ── Left Content Column ── */}
+                <div className="card-content">
+                  {/* Top row: icon + badge + index */}
+                  <div className="card-top-row">
+                    <div className="card-icon-badge">
+                      <div className="card-icon-wrap">
+                        <IconComponent className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
                       </div>
-                      <span className={`card-index ${tone.indexColor}`}>
-                        {formattedIndex}
+                      <span className={`card-badge ${tone.badgeBg}`}>
+                        Kannur Office
                       </span>
                     </div>
-
-                    {/* Title & description */}
-                    <h3 className="card-title">{service.title}</h3>
-                    <p className={`card-desc ${tone.subtext}`}>{service.description}</p>
-
-                    {/* Footer: features + CTA */}
-                    <div className="card-footer">
-                      <div className="card-features">
-                        {service.features.map((f, fIdx) => (
-                          <div key={fIdx} className="card-feature-item">
-                            <CheckCircle2 className="w-3 h-3 sm:w-3.5 sm:h-3.5 flex-shrink-0" />
-                            <span>{f}</span>
-                          </div>
-                        ))}
-                      </div>
-                      <Link to="/contact" className={`card-cta ${tone.ctaBg}`}>
-                        <span>Discover Our Approach</span>
-                        <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                      </Link>
-                    </div>
+                    <span className={`card-index ${tone.indexColor}`}>
+                      {formattedIndex}
+                    </span>
                   </div>
 
-                  {/* ── Right Graphic Panel (desktop only) ── */}
-                  <div className={`card-media hidden md:flex ${tone.mediaBg}`}>
-                    <div className="card-media-header">
-                      <span className="card-media-label">Service Solution #{formattedIndex}</span>
-                      <IconComponent className="w-7 h-7 opacity-40" />
+                  {/* Title & description */}
+                  <h3 className="card-title">{service.title}</h3>
+                  <p className={`card-desc ${tone.subtext}`}>{service.description}</p>
+
+                  {/* Footer: features + CTA */}
+                  <div className="card-footer">
+                    <div className="card-features">
+                      {service.features.map((f, fIdx) => (
+                        <div key={fIdx} className="card-feature-item">
+                          <CheckCircle2 className="w-3 h-3 sm:w-3.5 sm:h-3.5 flex-shrink-0 text-emerald-400" />
+                          <span>{f}</span>
+                        </div>
+                      ))}
                     </div>
-                    <div className="card-media-center">
-                      <div className="card-media-icon-wrap">
-                        <IconComponent className="w-8 h-8 lg:w-10 lg:h-10 text-white" />
-                      </div>
-                      <div className="card-media-title">{service.title}</div>
-                      <div className="card-media-sub">Custom Strategy & Media Buying</div>
-                    </div>
-                    <div className="card-media-footer">
-                      <span>Aleef Concepts</span>
-                      <span>Kannur • GCC</span>
-                    </div>
+                    <Link to="/contact" className={`card-cta ${tone.ctaBg}`}>
+                      <span>Discover Our Approach</span>
+                      <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                    </Link>
                   </div>
-                </article>
-              );
-            })}
-          </div>
+                </div>
+
+                {/* ── Right Graphic Panel (desktop only) ── */}
+                <div className={`card-media hidden md:flex ${tone.mediaBg}`}>
+                  <div className="card-media-header">
+                    <span className="card-media-label">Service Solution #{formattedIndex}</span>
+                    <IconComponent className="w-7 h-7 opacity-40" />
+                  </div>
+                  <div className="card-media-center">
+                    <div className="card-media-icon-wrap">
+                      <IconComponent className="w-8 h-8 lg:w-10 lg:h-10 text-white" />
+                    </div>
+                    <div className="card-media-title">{service.title}</div>
+                    <div className="card-media-sub">Custom Strategy & Media Buying</div>
+                  </div>
+                  <div className="card-media-footer">
+                    <span>Aleef Concepts</span>
+                    <span>Kannur • GCC</span>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>

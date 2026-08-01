@@ -2,28 +2,16 @@ import React, { forwardRef, useMemo, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import './VariableProximity.css';
 
-function useAnimationFrame(callback) {
-  useEffect(() => {
-    let frameId;
-    const loop = () => {
-      callback();
-      frameId = requestAnimationFrame(loop);
-    };
-    frameId = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(frameId);
-  }, [callback]);
-}
-
 function useMousePositionRef(containerRef) {
-  const positionRef = useRef({ x: -1000, y: -1000 });
+  const positionRef = useRef({ x: -1000, y: -1000, active: false });
 
   useEffect(() => {
     const updatePosition = (x, y) => {
       if (containerRef?.current) {
         const rect = containerRef.current.getBoundingClientRect();
-        positionRef.current = { x: x - rect.left, y: y - rect.top };
+        positionRef.current = { x: x - rect.left, y: y - rect.top, active: true };
       } else {
-        positionRef.current = { x, y };
+        positionRef.current = { x, y, active: true };
       }
     };
 
@@ -35,12 +23,12 @@ function useMousePositionRef(containerRef) {
       }
     };
     const handleMouseLeave = () => {
-      positionRef.current = { x: -1000, y: -1000 };
+      positionRef.current = { x: -1000, y: -1000, active: false };
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('touchmove', handleTouchMove);
-    window.addEventListener('mouseleave', handleMouseLeave);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: true });
+    window.addEventListener('mouseleave', handleMouseLeave, { passive: true });
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('touchmove', handleTouchMove);
@@ -113,43 +101,59 @@ const VariableProximity = forwardRef((props, ref) => {
     }
   };
 
-  useAnimationFrame(() => {
-    if (!effectiveContainerRef?.current) return;
-    const containerRect = effectiveContainerRef.current.getBoundingClientRect();
-    const { x, y } = mousePositionRef.current;
+  useEffect(() => {
+    let frameId;
+    let isRunning = true;
 
-    letterRefs.current.forEach((letterRef, index) => {
-      if (!letterRef) return;
+    const loop = () => {
+      if (!isRunning) return;
 
-      const rect = letterRef.getBoundingClientRect();
-      const letterCenterX = rect.left + rect.width / 2 - containerRect.left;
-      const letterCenterY = rect.top + rect.height / 2 - containerRect.top;
+      // Only perform letter calculations if mouse is active or lerping is in progress
+      if (mousePositionRef.current.active && effectiveContainerRef?.current) {
+        const containerRect = effectiveContainerRef.current.getBoundingClientRect();
+        const { x, y } = mousePositionRef.current;
 
-      const distance = calculateDistance(x, y, letterCenterX, letterCenterY);
+        letterRefs.current.forEach((letterRef, index) => {
+          if (!letterRef) return;
 
-      let targetFalloff = 0;
-      if (distance < radius) {
-        targetFalloff = calculateFalloff(distance);
+          const rect = letterRef.getBoundingClientRect();
+          const letterCenterX = rect.left + rect.width / 2 - containerRect.left;
+          const letterCenterY = rect.top + rect.height / 2 - containerRect.top;
+
+          const distance = calculateDistance(x, y, letterCenterX, letterCenterY);
+
+          let targetFalloff = 0;
+          if (distance < radius) {
+            targetFalloff = calculateFalloff(distance);
+          }
+
+          const prevFalloff = currentFalloffsRef.current[index] || 0;
+          const lerpedFalloff = prevFalloff + (targetFalloff - prevFalloff) * 0.18;
+          currentFalloffsRef.current[index] = lerpedFalloff;
+
+          const newSettings = parsedSettings
+            .map(({ axis, fromValue, toValue }) => {
+              const interpolatedValue = fromValue + (toValue - fromValue) * lerpedFalloff;
+              return `'${axis}' ${interpolatedValue.toFixed(1)}`;
+            })
+            .join(', ');
+
+          if (interpolatedSettingsRef.current[index] !== newSettings) {
+            interpolatedSettingsRef.current[index] = newSettings;
+            letterRef.style.fontVariationSettings = newSettings;
+          }
+        });
       }
 
-      // Smooth lerp for liquid fluidity
-      const prevFalloff = currentFalloffsRef.current[index] || 0;
-      const lerpedFalloff = prevFalloff + (targetFalloff - prevFalloff) * 0.18;
-      currentFalloffsRef.current[index] = lerpedFalloff;
+      frameId = requestAnimationFrame(loop);
+    };
 
-      const newSettings = parsedSettings
-        .map(({ axis, fromValue, toValue }) => {
-          const interpolatedValue = fromValue + (toValue - fromValue) * lerpedFalloff;
-          return `'${axis}' ${interpolatedValue.toFixed(1)}`;
-        })
-        .join(', ');
-
-      if (interpolatedSettingsRef.current[index] !== newSettings) {
-        interpolatedSettingsRef.current[index] = newSettings;
-        letterRef.style.fontVariationSettings = newSettings;
-      }
-    });
-  });
+    frameId = requestAnimationFrame(loop);
+    return () => {
+      isRunning = false;
+      cancelAnimationFrame(frameId);
+    };
+  }, [effectiveContainerRef, parsedSettings, radius, falloff]);
 
   const words = textContent.split(' ');
   let letterIndex = 0;

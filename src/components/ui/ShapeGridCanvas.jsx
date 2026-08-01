@@ -113,6 +113,7 @@ export default function ShapeGridCanvas() {
     let pointer = null;
     let activity = 0;
     let waves = [];
+    let isVisible = false;
 
     function buildGrid(W, H) {
       const cols = Math.floor(W / gap);
@@ -149,7 +150,7 @@ export default function ShapeGridCanvas() {
       const rect = parent.getBoundingClientRect();
       const W = rect.width;
       const H = rect.height;
-      const dpr = window.devicePixelRatio || 1;
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
 
       canvas.width = W * dpr;
       canvas.height = H * dpr;
@@ -170,7 +171,7 @@ export default function ShapeGridCanvas() {
     }
 
     function tick() {
-      if (!grid) {
+      if (!isVisible || !grid) {
         rafId = requestAnimationFrame(tick);
         return;
       }
@@ -241,6 +242,7 @@ export default function ShapeGridCanvas() {
     }
 
     function onMove(e) {
+      if (!isVisible) return;
       const parent = canvas.parentElement;
       if (!parent) return;
       const rect = parent.getBoundingClientRect();
@@ -254,6 +256,7 @@ export default function ShapeGridCanvas() {
     }
 
     function onClick(e) {
+      if (!isVisible) return;
       const parent = canvas.parentElement;
       if (!parent) return;
       const rect = parent.getBoundingClientRect();
@@ -265,15 +268,22 @@ export default function ShapeGridCanvas() {
       }
     }
 
+    // IntersectionObserver to pause rendering when offscreen
+    const observer = new IntersectionObserver(([entry]) => {
+      isVisible = entry.isIntersecting;
+    }, { threshold: 0.05 });
+
+    observer.observe(canvas);
+
     init();
     rafId = requestAnimationFrame(tick);
-    triggerWave();
 
     window.addEventListener('resize', init);
-    window.addEventListener('pointermove', onMove);
-    window.addEventListener('click', onClick);
+    window.addEventListener('pointermove', onMove, { passive: true });
+    window.addEventListener('click', onClick, { passive: true });
 
     return () => {
+      observer.disconnect();
       cancelAnimationFrame(rafId);
       window.removeEventListener('resize', init);
       window.removeEventListener('pointermove', onMove);
