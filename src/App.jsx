@@ -15,11 +15,23 @@ const ContactPage   = lazy(() => import('./pages/ContactPage'));
 
 gsap.registerPlugin(ScrollTrigger);
 
+/**
+ * ScrollToTop guarantees instant top section scroll on every page navigation.
+ * Disables browser default scroll restoration so every route starts at top 0,0.
+ */
 function ScrollToTop() {
   const { pathname } = useLocation();
 
   useLayoutEffect(() => {
-    window.scrollTo(0, 0);
+    if (typeof window !== 'undefined') {
+      if ('scrollRestoration' in window.history) {
+        window.history.scrollRestoration = 'manual';
+      }
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+    }
+
     const timer = setTimeout(() => {
       ScrollTrigger.refresh();
     }, 50);
