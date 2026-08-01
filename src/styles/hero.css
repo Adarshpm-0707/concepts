@@ -1,0 +1,35 @@
+/* Cinematic Typography */
+.text-outline-white {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.4);
+}
+
+/* Background Vignette */
+.bg-radial-vignette {
+  background: radial-gradient(
+    circle at center,
+    transparent 0%,
+    rgba(2, 4, 10, 0.4) 40%,
+    rgba(2, 4, 10, 0.9) 100%
+  );
+}
+
+/* Shine Animation for Buttons */
+@keyframes shine {
+  100% {
+    left: 125%;
+  }
+}
+.group-hover\:animate-shine {
+  animation: shine 0.8s italic;
+}
+
+/* Scroll behavior for the hero section */
+#hero {
+  perspective: 1000px;
+}
+
+/* Smooth transition for stat hover */
+.origin-left {
+  transform-origin: left;
+}
