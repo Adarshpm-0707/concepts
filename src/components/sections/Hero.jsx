@@ -42,10 +42,9 @@ export default function Hero() {
           </motion.div>
 
           {/* HEADLINE */}
-          <h1 className="text-3xl sm:text-6xl md:text-7xl lg:text-[5.25rem] font-extrabold font-heading text-white tracking-tight leading-[1.1] sm:leading-[1.05] max-w-6xl mx-auto">
-            KANNUR'S PREMIER <span className="gradient-text-bw">DIGITAL MARKETING</span>
-            <br className="hidden sm:block" />
-            {' '}AGENCY & BRANDING <span className="text-slate-400 font-light italic">STUDIO</span>
+          <h1 className="text-xl sm:text-4xl md:text-6xl lg:text-[4.75rem] font-extrabold font-heading text-white tracking-tight leading-[1.15] sm:leading-[1.08] max-w-6xl mx-auto">
+            <span className="block">KANNUR'S PREMIER <span className="gradient-text-bw">DIGITAL MARKETING</span></span>
+            <span className="block mt-1 sm:mt-2">AGENCY & BRANDING <span className="text-slate-400 font-light italic">STUDIO</span></span>
           </h1>
 
           {/* SUBTEXT */}

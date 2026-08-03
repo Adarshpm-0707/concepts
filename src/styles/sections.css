@@ -4,6 +4,290 @@
 .testimonial-quote { font-family: 'Syne', sans-serif; }
 
 /* ═══════════════════════════════════════════════════════════
+   PURE MONOCHROME SECTION THEMES & LAYOUT (Black & White)
+   ═══════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════════════════════
+   PURE BLACK & WHITE MONOCHROME STACKED SKEW-BG ANIMATION STYLES
+   ═══════════════════════════════════════════════════════════ */
+
+/* Stacking Container */
+.skew-main {
+  width: 100%;
+  position: relative;
+  background: #000000;
+  color: #ffffff;
+  overflow-x: hidden;
+  isolation: isolate;
+  font-family: "Satoshi", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Stacking z-indices for each section child */
+.skew-main > *:nth-child(1) { z-index: 1; }
+.skew-main > *:nth-child(2) { z-index: 2; }
+.skew-main > *:nth-child(3) { z-index: 3; }
+.skew-main > *:nth-child(4) { z-index: 4; }
+.skew-main > *:nth-child(5) { z-index: 5; }
+.skew-main > *:nth-child(6) { z-index: 6; }
+.skew-main > *:nth-child(7) { z-index: 7; }
+.skew-main > *:nth-child(8) { z-index: 8; }
+
+/* ── Pure Monochrome Black & White Themes ── */
+
+/* Ink Theme — Pure Deep Black */
+.ink {
+  --bg: #000000;
+  --fg: #ffffff;
+  --fg-soft: rgba(255, 255, 255, 0.7);
+  --line: rgba(255, 255, 255, 0.15);
+  background-color: var(--bg);
+  color: var(--fg);
+}
+
+/* Porcelain Theme — Dark Onyx Charcoal */
+.porcelain {
+  --bg: #0a0a0a;
+  --fg: #ffffff;
+  --fg-soft: rgba(255, 255, 255, 0.7);
+  --line: rgba(255, 255, 255, 0.15);
+  background-color: var(--bg);
+  color: var(--fg);
+}
+
+/* Forest Theme — Deep Dark Graphite */
+.forest {
+  --bg: #111111;
+  --fg: #ffffff;
+  --fg-soft: rgba(255, 255, 255, 0.7);
+  --line: rgba(255, 255, 255, 0.15);
+  background-color: var(--bg);
+  color: var(--fg);
+}
+
+/* Ember Theme — Dark Slate Black */
+.ember {
+  --bg: #0d0d0d;
+  --fg: #ffffff;
+  --fg-soft: rgba(255, 255, 255, 0.7);
+  --line: rgba(255, 255, 255, 0.15);
+  background-color: var(--bg);
+  color: var(--fg);
+}
+
+/* Steel Theme — Pure Obsidian */
+.steel {
+  --bg: #000000;
+  --fg: #ffffff;
+  --fg-soft: rgba(255, 255, 255, 0.7);
+  --line: rgba(255, 255, 255, 0.2);
+  background-color: var(--bg);
+  color: var(--fg);
+}
+
+/* Skew Section Item Wrapper */
+.skew-section-item {
+  width: 100%;
+  position: relative;
+  overflow: visible;
+  isolation: isolate;
+}
+
+.skew-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: visible;
+}
+
+.bg {
+  width: 100%;
+  height: 100%;
+  transform: none;
+  will-change: transform;
+}
+
+/* Split line mask reveal */
+.line-mask {
+  overflow: hidden;
+  display: block;
+}
+
+.line-inner {
+  display: block;
+  will-change: transform;
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+  max-width: 1480px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 3rem;
+  min-height: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.skew-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: visible;
+}
+
+.bg {
+  width: 100%;
+  height: 100%;
+  transform: none;
+  will-change: transform;
+}
+
+.heading {
+  font-size: 2.4rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  width: min(100%, 54rem);
+  margin-left: auto;
+  visibility: hidden;
+  color: var(--fg);
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 34% 1fr;
+  gap: 4rem;
+  align-items: end;
+  min-height: 0;
+  height: 100%;
+}
+
+.media {
+  width: 100%;
+  max-width: 340px;
+  height: 46vh;
+  border-radius: 6px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.media:hover img {
+  transform: scale(1.05);
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 2rem;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 6.5rem 1fr;
+  gap: 2rem;
+}
+
+.row span {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.row p {
+  font-size: 1rem;
+  color: var(--fg-soft);
+  max-width: 36rem;
+  line-height: 1.55;
+}
+
+.stats {
+  list-style: none;
+  max-width: 26rem;
+  width: 100%;
+}
+
+.stats li {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 1rem;
+  color: var(--fg);
+}
+
+/* Split line reveal mask */
+.line-mask {
+  overflow: hidden;
+  display: block;
+}
+
+.line-inner {
+  display: block;
+  will-change: transform;
+}
+
+/* Mobile & Tablet Responsiveness */
+@media (max-width: 1024px) {
+  .intro h1 {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+  }
+  .section {
+    padding: 3rem 2rem;
+    height: auto;
+    min-height: 100vh;
+  }
+  .content {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  .media {
+    max-width: 100%;
+    height: 38vh;
+  }
+  .heading {
+    font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .intro {
+    padding: 2rem 1rem;
+    height: 100vh;
+  }
+  .intro h1 {
+    font-size: 2.25rem;
+  }
+  .section {
+    padding: 2.5rem 1.25rem 4rem 1.25rem;
+  }
+  .container {
+    gap: 2rem;
+  }
+  .row {
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
+  }
+  .details {
+    gap: 1.25rem;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
    SERVICE SECTION  — 3D Stack Scroll Animation
    Uses GSAP pin: true. Navigation crash prevented via explicit
    ScrollTrigger.kill(true) before ctx.revert() in cleanup.
@@ -12,8 +296,8 @@
 /* ── Pinned section wrapper ── */
 .services-section {
   position: relative;
-  background: #000;
-  color: #fff;
+  background: transparent;
+  color: inherit;
   width: 100%;
   /* height controlled by GSAP pinSpacing */
   min-height: 100vh;
@@ -26,7 +310,6 @@
   padding-left: clamp(1rem, 4vw, 2rem);
   padding-right: clamp(1rem, 4vw, 2rem);
   box-sizing: border-box;
-  border-top: 1px solid rgba(255,255,255,0.1);
 }
 
 /* ── Section heading wrapper ── */
@@ -145,6 +428,7 @@
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   margin-bottom: clamp(0.3rem, 0.8vh, 0.75rem);
 }
@@ -275,6 +559,7 @@
 
   .card-desc {
     -webkit-line-clamp: 4;
+    line-clamp: 4;
   }
 }
 
@@ -295,6 +580,7 @@
 
   .card-desc {
     -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
 
   .card-features {

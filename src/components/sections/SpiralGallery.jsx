@@ -196,27 +196,21 @@ export default function SpiralGallery({
 
       const spiralHeight = Math.abs(tileEdgesY[totalTiles]);
 
-      let lenis = null;
       let spinVelocity = 0;
       let scrollY = window.pageYOffset;
 
-      try {
-        lenis = new Lenis({ autoRaf: true, duration: 1.0 });
-        lenis.on("scroll", (e) => {
-          scrollY = window.pageYOffset;
-          spinVelocity = e.velocity * CONFIG.scrollRotationMultiplier;
-        });
-      } catch (err) {}
-
-      const handleWindowScroll = () => {
-        if (!lenis) {
-          const newY = window.pageYOffset;
-          const diff = newY - scrollY;
-          scrollY = newY;
-          spinVelocity = diff * CONFIG.scrollRotationMultiplier * 0.05;
-        }
+      const handleScroll = (e) => {
+        const newY = window.pageYOffset;
+        const diff = newY - scrollY;
+        scrollY = newY;
+        const vel = (e && typeof e.velocity === 'number') ? e.velocity : diff;
+        spinVelocity = vel * CONFIG.scrollRotationMultiplier * 0.1;
       };
-      window.addEventListener("scroll", handleWindowScroll, { passive: true });
+
+      if (window.lenis) {
+        window.lenis.on('scroll', handleScroll);
+      }
+      window.addEventListener('scroll', handleScroll, { passive: true });
 
       let mouseX = 0, mouseY = 0, smoothX = 0, smoothY = 0;
       let isDragging = false;
@@ -298,7 +292,10 @@ export default function SpiralGallery({
 
       cleanupFn = () => {
         cancelAnimationFrame(animationFrameId);
-        window.removeEventListener("scroll", handleWindowScroll);
+        if (window.lenis) {
+          window.lenis.off("scroll", handleScroll);
+        }
+        window.removeEventListener("scroll", handleScroll);
         window.removeEventListener("mousemove", handlePointerMove);
         window.removeEventListener("touchmove", handlePointerMove);
         window.removeEventListener("mousedown", handlePointerDown);
@@ -306,7 +303,6 @@ export default function SpiralGallery({
         window.removeEventListener("mouseup", handlePointerUp);
         window.removeEventListener("touchend", handlePointerUp);
         window.removeEventListener("resize", handleResize);
-        if (lenis) lenis.destroy();
 
         scene.traverse((child) => {
           if (child.isMesh) {

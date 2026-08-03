@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import ShapeGridCanvas from '../ui/ShapeGridCanvas';
 import { brandData, navLinks, servicesData } from '../../data/content';
+import logoImg from '../../assets/logo-black.png';
 
 const socialIconMap = { Instagram, Linkedin, Facebook, Twitter, Youtube };
 
@@ -37,12 +38,10 @@ export default function Footer() {
           {/* Brand Info */}
           <div className="lg:col-span-2 space-y-3.5 sm:space-y-4">
             <Link to="/" className="flex items-center gap-3">
-              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-white text-black flex items-center justify-center font-black text-sm">
-                A
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-white text-black flex items-center justify-center overflow-hidden p-1 shadow-md">
+                <img src={logoImg} alt="Aleef Concepts Logo" className="w-full h-full object-contain" />
               </div>
-              <span className="font-heading font-bold text-xl sm:text-2xl text-white tracking-tight">
-                Aleef <span className="text-slate-400 font-light">Concepts</span>
-              </span>
+          
             </Link>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-md">
               {brandData.heroSubtitle}
@@ -131,8 +130,8 @@ export default function Footer() {
           <div className="p-5 rounded-2xl bg-neutral-900/90 border border-white/20 backdrop-blur-md space-y-3.5 shadow-xl">
             <div className="flex items-center justify-between">
               <Link to="/" className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-white text-black flex items-center justify-center font-black text-sm shadow-md">
-                  A
+                <div className="w-8 h-8 rounded-xl bg-white text-black flex items-center justify-center overflow-hidden p-1 shadow-md">
+                  <img src={logoImg} alt="Aleef Concepts Logo" className="w-full h-full object-contain" />
                 </div>
                 <span className="font-heading font-extrabold text-lg text-white tracking-tight">
                   Aleef <span className="text-slate-400 font-light">Concepts</span>

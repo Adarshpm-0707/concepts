@@ -10,7 +10,7 @@ import Contact from '../components/sections/Contact';
 
 export default function Home() {
   return (
-    <>
+    <div className="bg-black text-white relative w-full overflow-x-hidden">
       <Hero />
       <About />
       <WhyChooseUs />
@@ -19,6 +19,6 @@ export default function Home() {
       <Testimonials />
       <CTA />
       <Contact />
-    </>
+    </div>
   );
 }

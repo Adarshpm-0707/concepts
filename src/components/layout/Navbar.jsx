@@ -2,15 +2,10 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import PillNav from '../ui/PillNav';
 import { navLinks } from '../../data/content';
+import logoImg from '../../assets/logo-black.png';
 
 export default function Navbar() {
   const location = useLocation();
-
-  const logoNode = (
-    <div className="w-full h-full rounded-full bg-white flex items-center justify-center font-heading font-black text-black text-base uppercase">
-      A
-    </div>
-  );
 
   const items = navLinks.map(link => ({
     label: link.label,
@@ -19,7 +14,7 @@ export default function Navbar() {
 
   return (
     <PillNav
-      logo={logoNode}
+      logo={logoImg}
       logoAlt="Aleef Concepts"
       items={items}
       activeHref={location.pathname}
