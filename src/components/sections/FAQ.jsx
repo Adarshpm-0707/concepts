@@ -12,7 +12,7 @@ export default function FAQ() {
   };
 
   return (
-    <section className="py-24 bg-transparent relative overflow-hidden border-t border-white/10">
+    <section className="py-14 sm:py-20 lg:py-24 bg-transparent relative overflow-hidden border-t border-white/10">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <SectionHeading
           eyebrow={faqData.eyebrow}
@@ -29,7 +29,7 @@ export default function FAQ() {
                 initial={{ opacity: 0, y: 15 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: idx * 0.05 }}
+                transition={{ duration: 0.4, delay: idx * 0.04 }}
                 className={`rounded-2xl border transition-all duration-300 ${
                   isOpen
                     ? 'glass-card-bw border-white/40 shadow-lg shadow-white/5'
@@ -38,7 +38,7 @@ export default function FAQ() {
               >
                 <button
                   onClick={() => toggle(idx)}
-                  className="w-full p-6 text-left flex items-center justify-between gap-4 font-heading font-bold text-white text-base md:text-lg focus:outline-none"
+                  className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 font-heading font-bold text-white text-base sm:text-lg focus:outline-none"
                 >
                   <span className="flex items-center gap-3">
                     <HelpCircle className="w-5 h-5 text-white flex-shrink-0" />
@@ -56,7 +56,7 @@ export default function FAQ() {
                       transition={{ duration: 0.3 }}
                       className="overflow-hidden"
                     >
-                      <div className="px-6 pb-6 pt-0 text-sm text-slate-300 font-body leading-relaxed border-t border-neutral-800 mt-2 pt-4">
+                      <div className="px-5 sm:px-6 pb-6 text-sm sm:text-base text-slate-300 font-body leading-relaxed border-t border-neutral-800 pt-4">
                         {faq.answer}
                       </div>
                     </motion.div>

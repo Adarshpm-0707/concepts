@@ -6,13 +6,16 @@ import Lenis from 'lenis';
 
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
+import CursorGrid from './components/ui/CursorGrid';
 
 // Code-split pages for instant route switching
-const Home          = lazy(() => import('./pages/Home'));
-const AboutPage     = lazy(() => import('./pages/AboutPage'));
-const ServicesPage  = lazy(() => import('./pages/ServicesPage'));
-const PortfolioPage = lazy(() => import('./pages/PortfolioPage'));
-const ContactPage   = lazy(() => import('./pages/ContactPage'));
+const Home              = lazy(() => import('./pages/Home'));
+const AboutPage         = lazy(() => import('./pages/AboutPage'));
+const ServicesPage      = lazy(() => import('./pages/ServicesPage'));
+const ServiceDetailPage = lazy(() => import('./pages/ServiceDetailPage'));
+const PortfolioPage     = lazy(() => import('./pages/PortfolioPage'));
+const CareersPage       = lazy(() => import('./pages/CareersPage'));
+const ContactPage       = lazy(() => import('./pages/ContactPage'));
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -90,16 +93,38 @@ export default function App() {
   return (
     <BrowserRouter>
       <SmoothScroll />
+
+      {/* ── GLOBAL CURSOR GRID ── fixed overlay, all pages ── */}
+      <div style={{ position: 'fixed', inset: 0, zIndex: 9999, pointerEvents: 'none', mixBlendMode: 'screen' }}>
+        <CursorGrid
+          cellSize={40}
+          color="#ffffff"
+          radius={160}
+          falloff="smooth"
+          holdTime={400}
+          fadeDuration={900}
+          lineWidth={1}
+          maxOpacity={0.45}
+          fillOpacity={0.03}
+          gridOpacity={0.035}
+          cellRadius={0}
+          clickPulse={true}
+          pulseSpeed={550}
+        />
+      </div>
+
       <div className="relative min-h-screen text-slate-100 font-sans selection:bg-white selection:text-black flex flex-col overflow-x-hidden bg-black">
         <Navbar />
         <main className="flex-grow flex-1 relative z-10">
           <Suspense fallback={<PageFallback />}>
             <Routes>
-              <Route path="/"          element={<Home />} />
-              <Route path="/about"     element={<AboutPage />} />
-              <Route path="/services"  element={<ServicesPage />} />
-              <Route path="/portfolio" element={<PortfolioPage />} />
-              <Route path="/contact"   element={<ContactPage />} />
+              <Route path="/"                      element={<Home />} />
+              <Route path="/about"                 element={<AboutPage />} />
+              <Route path="/services"              element={<ServicesPage />} />
+              <Route path="/services/:serviceId"   element={<ServiceDetailPage />} />
+              <Route path="/portfolio"             element={<PortfolioPage />} />
+              <Route path="/careers"               element={<CareersPage />} />
+              <Route path="/contact"               element={<ContactPage />} />
             </Routes>
           </Suspense>
         </main>
@@ -108,4 +133,3 @@ export default function App() {
     </BrowserRouter>
   );
 }
-

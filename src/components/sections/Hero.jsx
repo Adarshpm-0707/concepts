@@ -1,107 +1,248 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Award, Phone, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, Award, CheckCircle2, Eye, Sparkles, TrendingUp, ShieldCheck, Zap, Star, MousePointer2 } from 'lucide-react';
 import Button from '../common/Button';
 import VariableProximity from '../ui/VariableProximity';
-import { brandData, heroStats } from '../../data/content';
+import BorderGlow from '../ui/BorderGlow';
+import SplitFlapText from '../ui/SplitFlapText';
+import { heroStats } from '../../data/content';
 
-const fadeIn = (delay = 0) => ({
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.15, delayChildren: 0.3 }
+  }
+};
+
+const itemVariants = {
   hidden: { opacity: 0, y: 20 },
-  show:   { opacity: 1, y: 0, transition: { duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] } }
-});
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } 
+  }
+};
 
 export default function Hero() {
-  const heroRef = useRef(null);
-
   return (
-    <section
-      ref={heroRef}
-      className="relative min-h-screen flex items-center justify-center overflow-visible bg-transparent pt-28 pb-16 md:pt-36 md:pb-24 border-b border-white/10"
-    >
-      {/* MONOCHROME AMBIENT OVERLAY */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[450px] bg-white/5 rounded-full blur-[160px] pointer-events-none" />
+    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#030303] pt-24 pb-12 md:pt-32 md:pb-20 px-4">
+      
+      {/* --- AMBIENT GLOW --- */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <motion.div 
+          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+          className="absolute top-[-10%] left-[-10%] w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-white/10 rounded-full blur-[80px] md:blur-[120px]" 
+        />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 w-full">
-        <div className="flex flex-col items-center text-center">
-
-          {/* BADGE */}
-          <motion.div
-            initial={{ opacity: 0, y: -15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mb-6 sm:mb-8"
-          >
-            <div className="px-3.5 py-1.5 sm:px-5 sm:py-2 rounded-full bg-neutral-900/90 border border-white/30 text-white text-[11px] sm:text-xs uppercase tracking-wider sm:tracking-widest font-bold font-accent inline-flex flex-wrap items-center justify-center gap-2 shadow-lg shadow-white/5 backdrop-blur-md">
-              <Award className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
-              <span>Kannur's Best Digital Marketing Office</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse hidden sm:inline-block" />
-              <span className="hidden sm:inline-block">Kerala & GCC</span>
+      <motion.div 
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="max-w-6xl mx-auto relative z-10 flex flex-col items-center text-center"
+      >
+        
+        {/* --- BADGE --- */}
+        <motion.div variants={itemVariants} className="mb-6 md:mb-8">
+          <div className="group relative px-4 py-1.5 md:px-5 md:py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-xl">
+            <div className="flex items-center gap-2 md:gap-3 text-[9px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] font-bold text-slate-300">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+              </span>
+              Creative Agency in Kerala
+              <span className="text-white/30">|</span>
+              <span className="text-white">Kannur • GCC</span>
             </div>
-          </motion.div>
-
-          {/* HEADLINE */}
-          <h1 className="text-xl sm:text-4xl md:text-6xl lg:text-[4.75rem] font-extrabold font-heading text-white tracking-tight leading-[1.15] sm:leading-[1.08] max-w-6xl mx-auto">
-            <span className="block">KANNUR'S PREMIER <span className="gradient-text-bw">DIGITAL MARKETING</span></span>
-            <span className="block mt-1 sm:mt-2">AGENCY & BRANDING <span className="text-slate-400 font-light italic">STUDIO</span></span>
-          </h1>
-
-          {/* SUBTEXT */}
-          <motion.p
-            variants={fadeIn(0.5)} initial="hidden" animate="show"
-            className="mt-5 sm:mt-8 text-sm sm:text-xl text-slate-300 font-body max-w-3xl mx-auto leading-relaxed px-2 sm:px-0"
-          >
-            <VariableProximity label={brandData.heroSubtitle} radius={140} falloff="smooth" />
-          </motion.p>
-
-          {/* KEY TRUST BULLETS */}
-          <motion.div
-            variants={fadeIn(0.7)} initial="hidden" animate="show"
-            className="mt-5 sm:mt-6 flex flex-col sm:flex-row items-center justify-center gap-2.5 sm:gap-6 text-xs sm:text-sm font-semibold text-slate-300 text-center sm:text-left"
-          >
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-white flex-shrink-0" />
-              <span>#1 Local SEO & Google Ranking in Kannur</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-white flex-shrink-0" />
-              <span>High-ROAS Meta & Google Ad Campaigns</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-white flex-shrink-0" />
-              <span>Dedicated Kannur Client Office Support</span>
-            </div>
-          </motion.div>
-
-          {/* CTAs */}
-          <motion.div variants={fadeIn(0.9)} initial="hidden" animate="show" className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-4 w-full sm:w-auto px-4 sm:px-0">
-            <Button text="Schedule Free Strategy Call" href="/contact" variant="primary" icon={ArrowRight} className="w-full sm:w-auto py-3.5 sm:py-4 px-6 sm:px-8" />
-            <a href={`tel:${brandData.phoneKerala}`} className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 sm:px-7 py-3.5 sm:py-4 rounded-full border border-white/30 bg-black/80 backdrop-blur-md text-white hover:bg-neutral-900 hover:border-white font-heading font-bold text-sm md:text-base tracking-wide transition-all duration-300">
-              <Phone className="w-4 h-4 text-white" />
-              <span>Call Office: {brandData.phoneKerala}</span>
-            </a>
-          </motion.div>
-        </div>
-
-        {/* STATS STRIP */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.0, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-12 sm:mt-16 grid grid-cols-2 lg:grid-cols-4 glass-card-bw rounded-2xl overflow-hidden divide-y sm:divide-y-0 lg:divide-x divide-white/20"
-        >
-          {heroStats.map((stat, idx) => (
-            <div key={idx} className="p-4 sm:p-7 text-center group transition-colors hover:bg-white/5">
-              <div className="text-2xl sm:text-3xl md:text-4xl font-extrabold font-heading mb-1 text-white group-hover:text-slate-200 transition-colors">
-                {stat.value}
-              </div>
-              <div className="text-[10px] sm:text-xs tracking-wider font-bold font-accent text-slate-400 uppercase">
-                {stat.label}
-              </div>
-            </div>
-          ))}
+          </div>
         </motion.div>
-      </div>
+
+        {/* --- MAIN HEADLINE --- */}
+        <motion.h1 
+          variants={itemVariants}
+          style={{ fontFamily: "'SFMono-Regular', 'Roboto Mono', 'Cascadia Code', 'Liberation Mono', Menlo, monospace" }}
+          className="text-[2.2rem] sm:text-5xl md:text-7xl lg:text-[5.5rem] font-black tracking-tight leading-[1.15] sm:leading-[1.1] md:leading-[1.05] text-white px-1 md:px-0 max-w-full"
+        >
+          We Are Creative Agency <br className="hidden md:block"/> in Kerala building<br className="hidden md:block" />
+          
+          {/* MOBILE VIEW: 2 Lines of SplitFlapText with much larger text size */}
+          <span className="flex flex-col items-center justify-center md:hidden mt-3 space-y-2">
+            <span className="block">
+              <SplitFlapText
+                words={['DIGITAL', 'MARKETING']}
+                flipDuration={0.12}
+                stagger={0.05}
+                cycleDelay={2600}
+                charset="alphanumeric"
+                flipsPerChar={6}
+                tileColor="#171717"
+                textColor="#ffffff"
+                tileRadius={6}
+                gap={3}
+                fontSize="clamp(24px, 7.2vw, 38px)"
+                padTo={9}
+                loop
+              />
+            </span>
+            <span className="block">
+              <SplitFlapText
+                words={['PLATFORMS.', 'SYSTEMS.']}
+                flipDuration={0.12}
+                stagger={0.05}
+                cycleDelay={2600}
+                charset="alphanumeric"
+                flipsPerChar={6}
+                tileColor="#171717"
+                textColor="#ffffff"
+                tileRadius={6}
+                gap={3}
+                fontSize="clamp(24px, 7.2vw, 38px)"
+                padTo={10}
+                loop
+              />
+            </span>
+          </span>
+
+          {/* DESKTOP / LAPTOP VIEW: Single Line SplitFlapText */}
+          <span className="hidden md:inline-block mt-6 py-1">
+            <SplitFlapText
+              words={['DIGITAL PLATFORMS.', 'MARKETING SYSTEMS.']}
+              flipDuration={0.12}
+              stagger={0.05}
+              cycleDelay={2600}
+              charset="alphanumeric"
+              flipsPerChar={6}
+              tileColor="#171717"
+              textColor="#ffffff"
+              tileRadius={6}
+              gap={4}
+              fontSize="clamp(36px, 5.5vw, 64px)"
+              padTo={18}
+              loop
+            />
+          </span>
+        </motion.h1>
+
+        {/* --- SUBHEADLINE --- */}
+        <motion.div variants={itemVariants} className="mt-5 md:mt-8 max-w-[95%] md:max-w-2xl px-2 md:px-0">
+          <p className="text-base sm:text-lg md:text-xl text-slate-300 font-body leading-relaxed">
+            <VariableProximity 
+              label="Companies that want to be taken seriously in Kannur and beyond." 
+              radius={80} 
+              falloff="smooth" 
+            />
+          </p>
+        </motion.div>
+
+        {/* --- CTAs --- */}
+        <motion.div variants={itemVariants} className="mt-6 md:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 w-full sm:w-auto px-4 sm:px-0">
+          <Button 
+            text="Start a Project" 
+            href="/contact" 
+            variant="primary" 
+            icon={ArrowRight} 
+            className="w-full sm:w-auto py-3.5 sm:py-4 px-8 sm:px-10 text-base md:text-lg rounded-full shadow-[0_0_20px_rgba(255,255,255,0.1)] font-bold" 
+          />
+          <a
+            href="/portfolio"
+            className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 sm:px-10 py-3.5 sm:py-4 rounded-full border border-white/10 bg-white/5 backdrop-blur-md text-white hover:bg-white hover:text-black transition-all duration-500 font-bold text-sm md:text-base"
+          >
+            <Eye className="w-4 h-4 md:w-5 md:h-5 transition-transform group-hover:scale-110" />
+            <span>View Work</span>
+          </a>
+        </motion.div>
+
+        {/* --- INTERACTIVE FLOATING CARD (RESPONSIVE) --- */}
+        <motion.div 
+          variants={itemVariants}
+          className="mt-8 md:mt-20 w-full max-w-5xl px-0 md:px-4 perspective-1000"
+        >
+          <BorderGlow glowColor="255, 255, 255" borderRadius={20} mdBorderRadius={32} className="group overflow-hidden bg-neutral-900/40 backdrop-blur-3xl border border-white/10">
+            
+            {/* MOBILE: 2x2 grid pills */}
+            <div className="grid grid-cols-2 md:hidden gap-2 p-3">
+              {[
+                { icon: <Sparkles className="w-4 h-4 text-emerald-400" />, label: 'Branding' },
+                { icon: <TrendingUp className="w-4 h-4 text-amber-400" />, label: 'Growth Ads' },
+                { icon: <Zap className="w-4 h-4 text-blue-400" />, label: 'Web Engine' },
+                { icon: <ShieldCheck className="w-4 h-4 text-purple-400" />, label: 'CRM Solutions' },
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-xs font-semibold">
+                  {item.icon}
+                  <span className="truncate">{item.label}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* DESKTOP: 3-column grid */}
+            <div className="hidden md:grid md:grid-cols-3 divide-x divide-white/10">
+              {/* Feature 1 */}
+              <div className="p-8 flex flex-col items-center text-center gap-0 group/item">
+                <div className="mb-4 p-3 rounded-2xl bg-white/5 text-white group-hover/item:bg-white group-hover/item:text-black transition-all duration-300">
+                  <Sparkles className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="font-heading font-bold text-white text-lg">Visual Brand</h3>
+                  <p className="text-sm text-slate-400 mt-1">Identity systems that command attention.</p>
+                </div>
+              </div>
+              {/* Feature 2 */}
+              <div className="p-8 flex flex-col items-center text-center gap-0 group/item">
+                <div className="mb-4 p-3 rounded-2xl bg-white/5 text-white group-hover/item:bg-white group-hover/item:text-black transition-all duration-300">
+                  <TrendingUp className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="font-heading font-bold text-white text-lg">Growth Ads</h3>
+                  <p className="text-sm text-slate-400 mt-1">Data-driven marketing for real ROI.</p>
+                </div>
+              </div>
+              {/* Feature 3 */}
+              <div className="p-8 flex flex-col items-center text-center gap-0 group/item">
+                <div className="mb-4 p-3 rounded-2xl bg-white/5 text-white group-hover/item:bg-white group-hover/item:text-black transition-all duration-300">
+                  <Zap className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="font-heading font-bold text-white text-lg">Web Engine</h3>
+                  <p className="text-sm text-slate-400 mt-1">High-speed platforms built to scale.</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom Stats Bar */}
+            <div className="bg-white/5 border-t border-white/10 px-3 py-3 md:p-4">
+              <div className="grid grid-cols-2 sm:grid-cols-4 md:flex md:flex-row justify-center gap-3 md:gap-8">
+                {heroStats.map((stat, idx) => (
+                  <div key={idx} className="flex flex-col items-center text-center md:flex-row md:gap-2">
+                    <span className="text-white font-bold text-sm md:text-base">{stat.value}</span>
+                    <span className="text-slate-400 text-[10px] md:text-[10px] uppercase tracking-wider">{stat.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </BorderGlow>
+        </motion.div>
+
+        {/* --- TRUST FOOTER --- */}
+        <motion.div 
+          variants={itemVariants}
+          className="mt-8 md:mt-16 flex flex-row flex-wrap items-center justify-center gap-x-4 gap-y-2.5 md:gap-8 opacity-75 px-4 md:px-0 text-xs sm:text-sm"
+        >
+          <div className="flex items-center gap-1.5 text-white font-semibold text-xs md:text-sm">
+            <ShieldCheck className="w-4 h-4 text-emerald-400" /> 100% Asset Ownership
+          </div>
+          <div className="w-px h-3 bg-white/20 hidden sm:block"></div>
+          <div className="flex items-center gap-1.5 text-white font-semibold text-xs md:text-sm">
+            <Star className="w-4 h-4 fill-white text-white" /> 4.9/5 Client Rating
+          </div>
+          <div className="w-px h-3 bg-white/20 hidden sm:block"></div>
+          <div className="flex items-center gap-1.5 text-white font-semibold text-xs md:text-sm">
+            <MousePointer2 className="w-4 h-4" /> Serving Kerala & GCC
+          </div>
+        </motion.div>
+
+      </motion.div>
     </section>
   );
 }

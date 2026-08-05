@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { CheckCircle2 } from 'lucide-react';
+import { CheckCircle2, ArrowRight } from 'lucide-react';
 import SectionHeading from '../common/SectionHeading';
 import Button from '../common/Button';
 import VariableProximity from '../ui/VariableProximity';
@@ -19,21 +19,18 @@ export default function About() {
           <SectionHeading eyebrow={aboutData.eyebrow} title={aboutData.title} centered={true} />
         </motion.div>
 
-        <motion.div variants={fadeUp(0.1)} initial="hidden" whileInView="show" viewport={{ once: true }} className="space-y-4 sm:space-y-5">
-          <p className="text-base sm:text-lg text-slate-200 font-body leading-relaxed font-medium text-center">
+        <motion.div variants={fadeUp(0.1)} initial="hidden" whileInView="show" viewport={{ once: true }} className="space-y-5 sm:space-y-6">
+          <p className="text-base sm:text-lg text-slate-200 font-body leading-relaxed text-center">
             <VariableProximity label={aboutData.descriptionParagraph1} radius={120} falloff="smooth" />
           </p>
-          <p className="text-sm sm:text-base text-slate-300 font-body leading-relaxed text-center">
+          <p className="text-base sm:text-xl font-bold text-white font-body leading-relaxed text-center p-4 sm:p-6 rounded-2xl bg-neutral-900/80 border border-white/20">
             <VariableProximity label={aboutData.descriptionParagraph2} radius={120} falloff="smooth" />
           </p>
           <p className="text-sm sm:text-base text-slate-300 font-body leading-relaxed text-center">
             <VariableProximity label={aboutData.descriptionParagraph3} radius={120} falloff="smooth" />
           </p>
-          <p className="text-sm sm:text-base font-bold text-white font-body leading-relaxed pt-1 sm:pt-2 text-center">
-            <VariableProximity label={aboutData.descriptionParagraph4} radius={120} falloff="smooth" />
-          </p>
           
-          <div className="pt-4 sm:pt-6 flex flex-col items-center justify-center space-y-2.5 sm:space-y-3">
+          <div className="pt-4 sm:pt-6 flex flex-col items-center justify-center space-y-3">
             {aboutData.highlights.map((h, idx) => (
               <motion.div key={idx} variants={fadeUp(0.15 + idx * 0.05)} initial="hidden" whileInView="show" viewport={{ once: true }} className="flex items-center justify-center gap-2.5 sm:gap-3 text-center">
                 <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-white flex-shrink-0" />
@@ -45,7 +42,7 @@ export default function About() {
           </div>
 
           <div className="pt-6 sm:pt-8 flex justify-center">
-            <Button text="Partner With Kannur's Best Office" href="/contact" variant="primary" className="w-full sm:w-auto text-center" />
+            <Button text="Start a Project With Us" href="/contact" variant="primary" icon={ArrowRight} className="w-full sm:w-auto text-center py-3.5 px-8" />
           </div>
         </motion.div>
       </div>
