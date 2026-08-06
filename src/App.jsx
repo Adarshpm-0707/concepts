@@ -3,10 +3,10 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
+import { motion, AnimatePresence } from 'framer-motion';
 
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
-import CursorGrid from './components/ui/CursorGrid';
 
 // Code-split pages for instant route switching
 const Home              = lazy(() => import('./pages/Home'));
@@ -29,24 +29,35 @@ function SmoothScroll() {
     if (typeof window === 'undefined') return;
 
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: 1.1,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
+      wheelMultiplier: 1.0,
       touchMultiplier: 1.5,
+      infinite: false,
     });
 
     window.lenis = lenis;
+
+    // Connect Lenis scroll event to GSAP ScrollTrigger update
     lenis.on('scroll', ScrollTrigger.update);
 
-    const tickerCb = (time) => {
-      lenis.raf(time * 1000);
-    };
+    // Native high-resolution requestAnimationFrame loop for Lenis
+    let animationFrameId;
+    function update(time) {
+      lenis.raf(time);
+      animationFrameId = requestAnimationFrame(update);
+    }
+    animationFrameId = requestAnimationFrame(update);
 
-    gsap.ticker.add(tickerCb);
-    gsap.ticker.lagSmoothing(0);
+    const handleResize = () => {
+      ScrollTrigger.refresh();
+    };
+    window.addEventListener('resize', handleResize);
 
     return () => {
-      gsap.ticker.remove(tickerCb);
+      cancelAnimationFrame(animationFrameId);
+      window.removeEventListener('resize', handleResize);
       lenis.destroy();
       delete window.lenis;
     };
@@ -68,12 +79,20 @@ function SmoothScroll() {
       };
 
       forceScrollTop();
-      const timer = setTimeout(() => {
+
+      const timer1 = setTimeout(() => {
         forceScrollTop();
         ScrollTrigger.refresh();
-      }, 100);
+      }, 50);
 
-      return () => clearTimeout(timer);
+      const timer2 = setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 350);
+
+      return () => {
+        clearTimeout(timer1);
+        clearTimeout(timer2);
+      };
     }
   }, [pathname]);
 
@@ -83,9 +102,38 @@ function SmoothScroll() {
 // Minimal fallback spinner during lazy chunk load
 function PageFallback() {
   return (
-    <div className="w-full min-h-[60vh] flex items-center justify-center bg-black text-white">
-      <div className="w-8 h-8 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+    <div className="w-full min-h-[70vh] flex items-center justify-center bg-black text-white">
+      <div className="w-9 h-9 border-2 border-white/20 border-t-white rounded-full animate-spin" />
     </div>
+  );
+}
+
+function AnimatedRoutes() {
+  const location = useLocation();
+
+  return (
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={location.pathname}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -10 }}
+        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+        className="w-full flex-grow flex flex-col"
+      >
+        <Suspense fallback={<PageFallback />}>
+          <Routes location={location}>
+            <Route path="/"                      element={<Home />} />
+            <Route path="/about"                 element={<AboutPage />} />
+            <Route path="/services"              element={<ServicesPage />} />
+            <Route path="/services/:serviceId"   element={<ServiceDetailPage />} />
+            <Route path="/portfolio"             element={<PortfolioPage />} />
+            <Route path="/careers"               element={<CareersPage />} />
+            <Route path="/contact"               element={<ContactPage />} />
+          </Routes>
+        </Suspense>
+      </motion.div>
+    </AnimatePresence>
   );
 }
 
@@ -94,39 +142,10 @@ export default function App() {
     <BrowserRouter>
       <SmoothScroll />
 
-      {/* ── GLOBAL CURSOR GRID ── fixed overlay, all pages ── */}
-      <div style={{ position: 'fixed', inset: 0, zIndex: 9999, pointerEvents: 'none', mixBlendMode: 'screen' }}>
-        <CursorGrid
-          cellSize={40}
-          color="#ffffff"
-          radius={160}
-          falloff="smooth"
-          holdTime={400}
-          fadeDuration={900}
-          lineWidth={1}
-          maxOpacity={0.45}
-          fillOpacity={0.03}
-          gridOpacity={0.035}
-          cellRadius={0}
-          clickPulse={true}
-          pulseSpeed={550}
-        />
-      </div>
-
       <div className="relative min-h-screen text-slate-100 font-sans selection:bg-white selection:text-black flex flex-col overflow-x-hidden bg-black">
         <Navbar />
-        <main className="flex-grow flex-1 relative z-10">
-          <Suspense fallback={<PageFallback />}>
-            <Routes>
-              <Route path="/"                      element={<Home />} />
-              <Route path="/about"                 element={<AboutPage />} />
-              <Route path="/services"              element={<ServicesPage />} />
-              <Route path="/services/:serviceId"   element={<ServiceDetailPage />} />
-              <Route path="/portfolio"             element={<PortfolioPage />} />
-              <Route path="/careers"               element={<CareersPage />} />
-              <Route path="/contact"               element={<ContactPage />} />
-            </Routes>
-          </Suspense>
+        <main className="flex-grow flex-1 relative z-10 flex flex-col">
+          <AnimatedRoutes />
         </main>
         <Footer />
       </div>

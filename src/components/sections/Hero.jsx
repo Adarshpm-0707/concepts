@@ -5,6 +5,7 @@ import Button from '../common/Button';
 import VariableProximity from '../ui/VariableProximity';
 import BorderGlow from '../ui/BorderGlow';
 import SplitFlapText from '../ui/SplitFlapText';
+import CursorGrid from '../ui/CursorGrid';
 import { heroStats } from '../../data/content';
 
 const containerVariants = {
@@ -28,6 +29,25 @@ export default function Hero() {
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#030303] pt-24 pb-12 md:pt-32 md:pb-20 px-4">
       
+      {/* --- HERO ONLY GRID ANIMATION --- */}
+      <div className="absolute inset-0 z-0 pointer-events-none mix-blend-screen overflow-hidden">
+        <CursorGrid
+          cellSize={40}
+          color="#ffffff"
+          radius={160}
+          falloff="smooth"
+          holdTime={400}
+          fadeDuration={900}
+          lineWidth={1}
+          maxOpacity={0.45}
+          fillOpacity={0.03}
+          gridOpacity={0.035}
+          cellRadius={0}
+          clickPulse={true}
+          pulseSpeed={550}
+        />
+      </div>
+
       {/* --- AMBIENT GLOW --- */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <motion.div 

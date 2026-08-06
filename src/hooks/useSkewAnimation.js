@@ -100,22 +100,11 @@ export function useSkewAnimation(containerRef) {
   useLayoutEffect(() => {
     if (typeof window === 'undefined' || !containerRef.current) return;
 
-    // 1. Initialize Lenis Smooth Scrolling
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-      touchMultiplier: 1.5,
-    });
-
-    lenis.on('scroll', ScrollTrigger.update);
-
-    const tickerCb = (time) => {
-      lenis.raf(time * 1000);
-    };
-
-    gsap.ticker.add(tickerCb);
-    gsap.ticker.lagSmoothing(0);
+    // 1. Reuse Global Lenis Smooth Scrolling instance
+    const lenis = window.lenis;
+    if (lenis) {
+      lenis.on('scroll', ScrollTrigger.update);
+    }
 
     let ctx = null;
 
@@ -173,8 +162,6 @@ export function useSkewAnimation(containerRef) {
 
     return () => {
       clearTimeout(timer);
-      gsap.ticker.remove(tickerCb);
-      lenis.destroy();
       if (ctx) ctx.revert();
     };
   }, [containerRef]);

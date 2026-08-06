@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { Sparkles, MoveHorizontal, ArrowUpRight, Compass } from 'lucide-react';
 
 const DEFAULT_CONFIG = {
-  totalImages: 10,
+  totalImages: 13,
   tilesPerRevolution: 15,
   revolutions: 5,
   startRadius: 5,
@@ -25,10 +25,26 @@ const DEFAULT_CONFIG = {
   parallaxStrength: 0.12,
 };
 
+const whatsappImages = [
+  "/assets/WhatsApp Image 2026-08-06 at 2.59.53 PM.jpeg",
+  "/assets/WhatsApp Image 2026-08-06 at 3.00.40 PM.jpeg",
+  "/assets/WhatsApp Image 2026-08-06 at 3.00.49 PM.jpeg",
+  "/assets/WhatsApp Image 2026-08-06 at 3.00.57 PM.jpeg",
+  "/assets/WhatsApp Image 2026-08-06 at 3.01.18 PM.jpeg",
+  "/assets/WhatsApp Image 2026-08-06 at 3.02.05 PM.jpeg",
+  "/assets/WhatsApp Image 2026-08-06 at 3.02.11 PM.jpeg",
+  "/assets/WhatsApp Image 2026-08-06 at 3.02.18 PM.jpeg",
+  "/assets/WhatsApp Image 2026-08-06 at 3.02.56 PM.jpeg",
+  "/assets/WhatsApp Image 2026-08-06 at 3.03.38 PM.jpeg",
+  "/assets/WhatsApp Image 2026-08-06 at 3.04.15 PM.jpeg",
+  "/assets/WhatsApp Image 2026-08-06 at 3.04.21 PM.jpeg",
+  "/assets/WhatsApp Image 2026-08-06 at 3.04.52 PM.jpeg"
+];
+
 export default function SpiralGallery({ 
   title = "Somewhere between structure and disorder new forms quietly start to emerge",
   subtitle = "3D Interactive Case Study Showcase",
-  imagesCount = 10,
+  imagesCount = 13,
   customImages = null
 }) {
   const containerRef = useRef(null);
@@ -36,16 +52,19 @@ export default function SpiralGallery({
   const [activeProjectIdx, setActiveProjectIdx] = useState(0);
 
   const projectsData = [
-    { title: "Royal Specialty Hospital", category: "Healthcare & Medical Tech", location: "Kannur, Kerala", result: "+320% Inquiries", img: "/assets/img1.jpg" },
-    { title: "Malabar Haven Villas", category: "Luxury Architecture & Real Estate", location: "Kannur & Dubai", result: "4.8x ROAS", img: "/assets/img2.jpg" },
-    { title: "North Malabar Gourmet Cafe", category: "Hospitality & Brand Identity", location: "Kannur, Kerala", result: "1.8M Viral Views", img: "/assets/img3.jpg" },
-    { title: "Elite Apparel & Couture", category: "Retail & E-commerce", location: "Kerala & GCC", result: "+210% Sales", img: "/assets/img4.jpg" },
-    { title: "GCC Commercial Hub", category: "Performance Marketing", location: "Dubai, UAE", result: "3.5x Conversions", img: "/assets/img5.jpg" },
-    { title: "Aleef Media Production", category: "Cinematic Reel Studio", location: "Kannur, Kerala", result: "2.4M Reach", img: "/assets/img6.jpg" },
-    { title: "Malabar Motors Hub", category: "Automotive Marketing", location: "Kannur, Kerala", result: "+180% Leads", img: "/assets/img7.jpg" },
-    { title: "Zenith EdTech Academy", category: "Education Branding", location: "Calicut & Kannur", result: "98% Admissions", img: "/assets/img8.jpg" },
-    { title: "Sunset Eco Resort", category: "Tourism & Hotel Booking", location: "Wayanal & Kannur", result: "4.2x Direct Bookings", img: "/assets/img9.jpg" },
-    { title: "Aleef Growth Engine", category: "Digital Transformation", location: "South India & GCC", result: "#1 Ranked Agency", img: "/assets/img10.jpg" }
+    { title: "Royal Specialty Hospital", category: "Healthcare & Medical Tech", location: "Kannur, Kerala", result: "+320% Inquiries", img: whatsappImages[0] },
+    { title: "Malabar Haven Villas", category: "Luxury Architecture & Real Estate", location: "Kannur & Dubai", result: "4.8x ROAS", img: whatsappImages[1] },
+    { title: "North Malabar Gourmet Cafe", category: "Hospitality & Brand Identity", location: "Kannur, Kerala", result: "1.8M Viral Views", img: whatsappImages[2] },
+    { title: "Elite Apparel & Couture", category: "Retail & E-commerce", location: "Kerala & GCC", result: "+210% Sales", img: whatsappImages[3] },
+    { title: "GCC Commercial Hub", category: "Performance Marketing", location: "Dubai, UAE", result: "3.5x Conversions", img: whatsappImages[4] },
+    { title: "Aleef Media Production", category: "Cinematic Reel Studio", location: "Kannur, Kerala", result: "2.4M Reach", img: whatsappImages[5] },
+    { title: "Malabar Motors Hub", category: "Automotive Marketing", location: "Kannur, Kerala", result: "+180% Leads", img: whatsappImages[6] },
+    { title: "Zenith EdTech Academy", category: "Education Branding", location: "Calicut & Kannur", result: "98% Admissions", img: whatsappImages[7] },
+    { title: "Sunset Eco Resort", category: "Tourism & Hotel Booking", location: "Wayanad & Kannur", result: "4.2x Direct Bookings", img: whatsappImages[8] },
+    { title: "Aleef Growth Engine", category: "Digital Transformation", location: "South India & GCC", result: "#1 Ranked Agency", img: whatsappImages[9] },
+    { title: "Kerala Tech Venture", category: "SaaS & Web Platform", location: "Kannur & Bangalore", result: "5x User Growth", img: whatsappImages[10] },
+    { title: "Luxury Retail Studio", category: "E-Commerce & Branding", location: "Kerala & UAE", result: "+310% Orders", img: whatsappImages[11] },
+    { title: "Urban Living Spaces", category: "Interior & Architecture", location: "Kannur, Kerala", result: "2.9x Inquiries", img: whatsappImages[12] }
   ];
 
   useEffect(() => {
@@ -107,7 +126,7 @@ export default function SpiralGallery({
       container.appendChild(renderer.domElement);
 
       const textureLoader = new THREE.TextureLoader();
-      const imageSources = customImages || Array.from({ length: CONFIG.totalImages }, (_, i) => `/assets/img${i + 1}.jpg`);
+      const imageSources = customImages || whatsappImages;
 
       const textures = imageSources.map((src, i) => {
         return textureLoader.load(src, (t) => {

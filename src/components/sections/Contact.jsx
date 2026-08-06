@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { MapPin, Phone, Mail, Clock, Send, MessageSquare, CheckCircle2 } from 'lucide-react';
 import SectionHeading from '../common/SectionHeading';
 import Button from '../common/Button';
+import CurvedInput from '../ui/CurvedInput';
 import { brandData } from '../../data/content';
 
 export default function Contact() {
@@ -16,7 +17,7 @@ export default function Contact() {
   });
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    if (e?.preventDefault) e.preventDefault();
     setSubmitted(true);
   };
 
@@ -28,6 +29,44 @@ export default function Contact() {
           title="Visit Kannur's Best Digital Marketing Office"
           subtitle="Get in touch with our team in Kannur for a custom strategy consultation and campaign proposal."
         />
+
+        {/* --- CURVED INPUT QUICK CONSULTATION BAR (BLACK & WHITE MONOCHROME) --- */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mb-12 max-w-2xl mx-auto w-full flex flex-col items-center justify-center text-center"
+        >
+          <p className="text-xs sm:text-sm font-bold text-slate-300 uppercase tracking-widest mb-4">
+            Instant Strategy Consultation Request
+          </p>
+          <div className="w-full flex justify-center">
+            <CurvedInput
+              placeholder="Enter your email for a free strategy proposal..."
+              buttonText="Get Strategy"
+              theme="dark"
+              bend={22}
+              height={60}
+              width="100%"
+              backgroundColor="#0a0a0a"
+              borderColor="#ffffff"
+              textColor="#ffffff"
+              placeholderColor="#888888"
+              buttonColor="#ffffff"
+              buttonTextColor="#000000"
+              iconColor="#ffffff"
+              shadowSize="lg"
+              shadowColor="#000000"
+              onSubmit={(val) => {
+                if (val) {
+                  setFormData((prev) => ({ ...prev, email: val }));
+                  setSubmitted(true);
+                }
+              }}
+            />
+          </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
           {/* Office Contact Info */}
