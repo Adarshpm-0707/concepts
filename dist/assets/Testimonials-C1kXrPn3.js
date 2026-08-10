@@ -1,4 +1,4 @@
-import{c as o,j as e,f as a,m as n,M as c,t as l}from"./index-D4FUeiWL.js";import{S as d}from"./SectionHeading-Bb_R5PC4.js";import{B as m,A as p}from"./VariableProximity-DnJQW7Um.js";import{B as x,T as h}from"./IconBox-niwUsKft.js";/**
+import{c as o,j as e,f as a,m as n,M as c,t as l}from"./index-BxS15Xhd.js";import{S as d}from"./SectionHeading-B24GHphL.js";import{B as m,A as p}from"./VariableProximity-DbcFfG6S.js";import{B as x,T as h}from"./IconBox-C_OmRrDQ.js";/**
  * @license lucide-react v0.475.0 - ISC
  *
  * This source code is licensed under the ISC license.

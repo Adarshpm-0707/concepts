@@ -568,7 +568,7 @@
    ═══════════════════════════════════════════════════════ */
 @media (max-width: 639px) {
   .services-section {
-    padding-top: 4.25rem;
+    padding-top: 3.5rem;
     padding-bottom: 1.25rem;
     padding-left: 0.85rem;
     padding-right: 0.85rem;
@@ -576,14 +576,24 @@
   }
 
   .stack__deck {
-    height: clamp(250px, 44vh, 320px);
+    height: auto;
+    min-height: 195px;
   }
 
   .stack-card {
+    display: flex;
+    flex-direction: column;
     grid-template-columns: 1fr;
-    padding: 0.85rem;
-    border-radius: 16px;
-    gap: 0.4rem;
+    height: auto;
+    padding: 1rem;
+    border-radius: 18px;
+    gap: 0.35rem;
+  }
+
+  .card-content {
+    display: flex;
+    flex-direction: column;
+    height: auto;
   }
 
   .card-top-row {
@@ -602,14 +612,15 @@
   }
 
   .card-desc {
-    font-size: 0.78rem;
-    line-height: 1.45;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    margin-bottom: 0.5rem;
+    font-size: 0.8rem;
+    line-height: 1.42;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+    margin-bottom: 0.25rem;
   }
 
   .card-footer {
+    margin-top: 0.65rem;
     padding-top: 0.5rem;
   }
 

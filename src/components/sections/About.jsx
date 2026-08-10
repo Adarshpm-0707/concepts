@@ -27,7 +27,7 @@ export default function About() {
             <VariableProximity label={aboutData.descriptionParagraph2} radius={120} falloff="smooth" />
           </p>
           <p className="text-sm sm:text-base text-slate-300 font-body leading-relaxed text-center">
-            <VariableProximity label={aboutData.descriptionParagraph3} radius={120} falloff="smooth" />
+      
           </p>
         
 
