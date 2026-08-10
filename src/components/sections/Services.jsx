@@ -4,7 +4,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import {
   Megaphone, Search, BarChart3, Share2, Palette, Code2, Zap, ShieldAlert,
-  CheckCircle2, ArrowRight
+  ArrowRight
 } from 'lucide-react';
 import SectionHeading from '../common/SectionHeading';
 import { servicesData } from '../../data/content';
@@ -41,10 +41,10 @@ export default function Services() {
       const isMobile = w < 640;
       const isTablet = w >= 640 && w < 1024;
 
-      const PEEK        = isMobile ? 10 : isTablet ? 18 : 24;
-      const SCALE_STEP  = isMobile ? 0.02 : isTablet ? 0.03 : 0.038;
-      const FLY_ROTATE  = isMobile ? -6  : isTablet ? -12  : -18;
-      const SCROLL_MULT = isMobile ? 0.45 : isTablet ? 0.55 : 0.65;
+      const PEEK        = isMobile ? 6 : isTablet ? 14 : 24;
+      const SCALE_STEP  = isMobile ? 0.015 : isTablet ? 0.028 : 0.038;
+      const FLY_ROTATE  = isMobile ? -5  : isTablet ? -12  : -18;
+      const SCROLL_MULT = isMobile ? 0.4 : isTablet ? 0.55 : 0.65;
 
       function stackPose(index) {
         return { y: index * PEEK, scale: 1 - index * SCALE_STEP };
@@ -157,16 +157,8 @@ export default function Services() {
                   <h3 className="card-title">{service.title}</h3>
                   <p className={`card-desc ${tone.subtext}`}>{service.description}</p>
 
-                  {/* Footer: features + CTA */}
+                  {/* Footer: CTA */}
                   <div className="card-footer">
-                    <div className="card-features">
-                      {service.features.map((f, fIdx) => (
-                        <div key={fIdx} className="card-feature-item">
-                          <CheckCircle2 className="w-3 h-3 sm:w-3.5 sm:h-3.5 flex-shrink-0 text-emerald-400" />
-                          <span>{f}</span>
-                        </div>
-                      ))}
-                    </div>
                     <Link to="/contact" className={`card-cta ${tone.ctaBg}`}>
                       <span>Discover Our Approach</span>
                       <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />

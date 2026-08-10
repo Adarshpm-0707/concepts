@@ -29,17 +29,7 @@ export default function About() {
           <p className="text-sm sm:text-base text-slate-300 font-body leading-relaxed text-center">
             <VariableProximity label={aboutData.descriptionParagraph3} radius={120} falloff="smooth" />
           </p>
-          
-          <div className="pt-4 sm:pt-6 flex flex-col items-center justify-center space-y-3">
-            {aboutData.highlights.map((h, idx) => (
-              <motion.div key={idx} variants={fadeUp(0.15 + idx * 0.05)} initial="hidden" whileInView="show" viewport={{ once: true }} className="flex items-center justify-center gap-2.5 sm:gap-3 text-center">
-                <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-white flex-shrink-0" />
-                <span className="text-xs sm:text-sm font-semibold text-slate-200 leading-snug">
-                  <VariableProximity label={h} radius={100} falloff="smooth" />
-                </span>
-              </motion.div>
-            ))}
-          </div>
+        
 
           <div className="pt-6 sm:pt-8 flex justify-center">
             <Button text="Start a Project With Us" href="/contact" variant="primary" icon={ArrowRight} className="w-full sm:w-auto text-center py-3.5 px-8" />

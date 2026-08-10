@@ -363,7 +363,7 @@ export default function SpiralGallery({
       <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-neutral-950 to-transparent pointer-events-none z-10" />
 
       {/* Floating Content Overlays */}
-      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-20 pb-16 pointer-events-none flex flex-col justify-between min-h-[130vh]">
+      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 pb-12 pointer-events-none flex flex-col justify-between min-h-[130vh]">
         
         {/* Header Title Section */}
         <div className="max-w-4xl">

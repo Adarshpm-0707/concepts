@@ -27,7 +27,7 @@ const itemVariants = {
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#030303] pt-24 pb-12 md:pt-32 md:pb-20 px-4">
+    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#030303] pt-20 pb-10 md:pt-32 md:pb-20 px-4">
       
       {/* --- HERO ONLY GRID ANIMATION --- */}
       <div className="absolute inset-0 z-0 pointer-events-none mix-blend-screen overflow-hidden">
@@ -65,9 +65,9 @@ export default function Hero() {
       >
         
         {/* --- BADGE --- */}
-        <motion.div variants={itemVariants} className="mb-6 md:mb-8">
-          <div className="group relative px-4 py-1.5 md:px-5 md:py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-xl">
-            <div className="flex items-center gap-2 md:gap-3 text-[9px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] font-bold text-slate-300">
+        <motion.div variants={itemVariants} className="mb-4 sm:mb-6 md:mb-8">
+          <div className="group relative px-3.5 py-1.5 md:px-5 md:py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-xl">
+            <div className="flex items-center gap-1.5 md:gap-3 text-[9px] md:text-xs uppercase tracking-[0.12em] md:tracking-[0.2em] font-bold text-slate-300">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
@@ -83,13 +83,13 @@ export default function Hero() {
         <motion.h1 
           variants={itemVariants}
           style={{ fontFamily: "'SFMono-Regular', 'Roboto Mono', 'Cascadia Code', 'Liberation Mono', Menlo, monospace" }}
-          className="text-[2.2rem] sm:text-5xl md:text-7xl lg:text-[5.5rem] font-black tracking-tight leading-[1.15] sm:leading-[1.1] md:leading-[1.05] text-white px-1 md:px-0 max-w-full"
+          className="text-[1.75rem] sm:text-5xl md:text-7xl lg:text-[5.5rem] font-black tracking-tight leading-[1.2] sm:leading-[1.1] md:leading-[1.05] text-white px-1 md:px-0 max-w-full"
         >
           We Are Creative Agency <br className="hidden md:block"/> in Kerala building<br className="hidden md:block" />
           
-          {/* MOBILE VIEW: 2 Lines of SplitFlapText with much larger text size */}
-          <span className="flex flex-col items-center justify-center md:hidden mt-3 space-y-2">
-            <span className="block">
+          {/* MOBILE VIEW: 2 Lines of SplitFlapText with clean mobile font sizing */}
+          <span className="flex flex-col items-center justify-center md:hidden mt-2.5 space-y-1.5 max-w-full overflow-hidden">
+            <span className="block max-w-full">
               <SplitFlapText
                 words={['DIGITAL', 'MARKETING']}
                 flipDuration={0.12}
@@ -99,14 +99,14 @@ export default function Hero() {
                 flipsPerChar={6}
                 tileColor="#171717"
                 textColor="#ffffff"
-                tileRadius={6}
-                gap={3}
-                fontSize="clamp(24px, 7.2vw, 38px)"
+                tileRadius={5}
+                gap={2}
+                fontSize="clamp(18px, 5.8vw, 32px)"
                 padTo={9}
                 loop
               />
             </span>
-            <span className="block">
+            <span className="block max-w-full">
               <SplitFlapText
                 words={['PLATFORMS.', 'SYSTEMS.']}
                 flipDuration={0.12}
@@ -116,9 +116,9 @@ export default function Hero() {
                 flipsPerChar={6}
                 tileColor="#171717"
                 textColor="#ffffff"
-                tileRadius={6}
-                gap={3}
-                fontSize="clamp(24px, 7.2vw, 38px)"
+                tileRadius={5}
+                gap={2}
+                fontSize="clamp(18px, 5.8vw, 32px)"
                 padTo={10}
                 loop
               />

@@ -43,11 +43,12 @@ export default function Contact() {
           </p>
           <div className="w-full flex justify-center">
             <CurvedInput
-              placeholder="Enter your email for a free strategy proposal..."
+              placeholder={typeof window !== 'undefined' && window.innerWidth < 640 ? "Enter your email..." : "Enter your email for a free strategy proposal..."}
               buttonText="Get Strategy"
               theme="dark"
-              bend={22}
-              height={60}
+              bend={typeof window !== 'undefined' && window.innerWidth < 640 ? 12 : 22}
+              height={typeof window !== 'undefined' && window.innerWidth < 640 ? 54 : 60}
+              fontSize={typeof window !== 'undefined' && window.innerWidth < 640 ? 14 : 16}
               width="100%"
               backgroundColor="#0a0a0a"
               borderColor="#ffffff"

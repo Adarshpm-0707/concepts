@@ -1,0 +1,446 @@
+/* ═══════════════════════════════════════════════════════════
+   CLAY SPHERE 3D GALLERY & CONSTELLATION STYLES
+   ═══════════════════════════════════════════════════════════ */
+
+:root {
+  --clay-base: #141416;
+  --clay-highlight: rgba(255, 255, 255, 0.08);
+  --clay-shadow: rgba(0, 0, 0, 0.9);
+  --clay-inset-light: rgba(255, 255, 255, 0.04);
+  --clay-inset-dark: rgba(0, 0, 0, 0.6);
+}
+
+/* Grid Overlay */
+.clay-grid-overlay {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 40px 40px;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Main Container */
+.clay-gallery-container {
+  position: relative;
+  width: 100%;
+  min-height: 280vh; /* Smooth scroll track */
+  background: #000000;
+  color: #ffffff;
+}
+
+/* Sticky Scene */
+.clay-sticky-scene {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Inner Layout Container: Text at top center, 3D circle stage under text */
+.clay-scene-grid {
+  width: 100%;
+  max-width: 1100px;
+  height: 100%;
+  margin: 0 auto;
+  padding: clamp(6.5rem, 11vh, 9rem) 1.5rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1.25rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* Top Centered Floating Text Info Box */
+.clay-floating-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 720px;
+  width: 100%;
+  z-index: 10;
+  gap: 0.85rem;
+  flex-shrink: 0;
+}
+
+.clay-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
+  background: var(--clay-base);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 
+    4px 4px 10px var(--clay-shadow),
+    inset 1px 1px 2px var(--clay-inset-light),
+    inset -1px -1px 2px var(--clay-inset-dark);
+  width: fit-content;
+}
+
+.clay-info-card {
+  background: rgba(18, 18, 20, 0.85);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 24px;
+  padding: 1.25rem 2rem;
+  box-shadow: 
+    0 20px 50px rgba(0, 0, 0, 0.7),
+    inset 1px 1px 2px var(--clay-inset-light);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.65rem;
+  width: 100%;
+}
+
+.clay-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.clay-category-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.clay-result-pill {
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #000000;
+}
+
+.clay-title {
+  font-family: var(--font-heading, 'Syne', sans-serif);
+  font-size: clamp(1.3rem, 2.2vw, 1.95rem);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+}
+
+.clay-desc {
+  font-size: clamp(0.8rem, 1vw, 0.925rem);
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 600px;
+}
+
+.clay-location-tag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  width: 100%;
+}
+
+/* 3D Sphere Stage (Positioned directly UNDER the text) */
+.clay-stage-wrap {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1200px;
+  position: relative;
+  min-height: 340px;
+}
+
+.clay-sphere {
+  position: relative;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* 3D Clay Card */
+.clay-card {
+  position: absolute;
+  width: 150px;
+  height: 200px;
+  left: -75px;
+  top: -100px;
+  background: var(--clay-base);
+  border-radius: 18px;
+  padding: 7px;
+  transform-style: preserve-3d;
+  backface-visibility: visible;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    8px 8px 18px var(--clay-shadow),
+    -4px -4px 10px rgba(255, 255, 255, 0.02),
+    inset 3px 3px 6px var(--clay-inset-light),
+    inset -3px -3px 6px var(--clay-inset-dark);
+  transition: filter 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+  cursor: pointer;
+  user-select: none;
+}
+
+.clay-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+  filter: grayscale(75%) brightness(0.65);
+  transition: all 0.4s ease;
+  box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.8);
+}
+
+.clay-card.active-card {
+  border-color: rgba(255, 255, 255, 0.4);
+  filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.25));
+  box-shadow: 
+    0 12px 30px rgba(0, 0, 0, 0.9),
+    0 0 15px rgba(255, 255, 255, 0.15),
+    inset 3px 3px 6px var(--clay-inset-light);
+}
+
+.clay-card.active-card img {
+  filter: grayscale(0%) brightness(1.05);
+}
+
+/* Background Network Overlay Lines */
+.clay-network-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   JOURNEY / CONSTELLATION SECTION
+   ═══════════════════════════════════════════════════════════ */
+
+.clay-journey-section {
+  position: relative;
+  min-height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background: radial-gradient(circle at center, #141418 0%, #000000 75%);
+  padding: 6rem 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.clay-constellation {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.constellation-card {
+  position: absolute;
+  width: 110px;
+  height: 150px;
+  opacity: 0.65;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.8);
+}
+
+.clay-journey-content {
+  text-align: center;
+  z-index: 5;
+  max-width: 650px;
+  width: 100%;
+  background: rgba(16, 16, 18, 0.8);
+  padding: clamp(2rem, 5vw, 3.5rem);
+  border-radius: 28px;
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.clay-journey-content h2 {
+  font-family: var(--font-heading, 'Syne', sans-serif);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+}
+
+.clay-journey-content p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: clamp(0.9rem, 1.3vw, 1.15rem);
+  max-width: 480px;
+}
+
+.clay-chunky-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 1rem 2.25rem;
+  border-radius: 999px;
+  font-family: var(--font-heading, sans-serif);
+  font-size: 1rem;
+  font-weight: 700;
+  color: #000000;
+  background: #ffffff;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  box-shadow: 
+    0px 4px 0px rgba(180, 180, 190, 0.5),
+    0px 8px 18px rgba(0, 0, 0, 0.6),
+    inset 0px -2px 5px rgba(0, 0, 0, 0.15),
+    inset 0px 2px 5px rgba(255, 255, 255, 0.9);
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease;
+}
+
+.clay-chunky-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0px 6px 0px rgba(180, 180, 190, 0.6),
+    0px 12px 24px rgba(0, 0, 0, 0.7),
+    inset 0px -2px 5px rgba(0, 0, 0, 0.15),
+    inset 0px 2px 5px rgba(255, 255, 255, 0.95);
+}
+
+.clay-chunky-btn:active {
+  transform: translateY(3px);
+  box-shadow: 
+    0px 1px 0px rgba(180, 180, 190, 0.5),
+    0px 3px 8px rgba(0, 0, 0, 0.5),
+    inset 0px -1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE DESIGN (Laptop, Tablet, Mobile)
+   ═══════════════════════════════════════════════════════════ */
+
+@media (max-width: 1023px) {
+  .clay-scene-grid {
+    padding-top: 4.5rem;
+    gap: 1rem;
+  }
+
+  .clay-info-card {
+    padding: 1.1rem 1.5rem;
+    gap: 0.5rem;
+  }
+
+  .clay-title {
+    font-size: 1.3rem;
+  }
+
+  .clay-desc {
+    font-size: 0.825rem;
+  }
+}
+
+@media (max-width: 639px) {
+  .clay-gallery-container {
+    min-height: 220vh;
+  }
+
+  .clay-scene-grid {
+    padding: 3.75rem 0.75rem 0.75rem 0.75rem;
+    gap: 0.5rem;
+    justify-content: flex-start;
+  }
+
+  .clay-floating-info {
+    gap: 0.5rem;
+    max-width: 100%;
+  }
+
+  .clay-badge {
+    font-size: 0.65rem;
+    padding: 0.25rem 0.65rem;
+  }
+
+  .clay-info-card {
+    padding: 0.75rem 0.85rem;
+    border-radius: 16px;
+    gap: 0.3rem;
+  }
+
+  .clay-title {
+    font-size: 1.1rem;
+    line-height: 1.2;
+  }
+
+  .clay-desc {
+    font-size: 0.75rem;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .clay-stage-wrap {
+    min-height: 260px;
+    margin-top: 0.5rem;
+    flex: 1;
+    perspective: 800px;
+  }
+
+  .clay-card {
+    width: 85px;
+    height: 115px;
+    left: -42.5px;
+    top: -57.5px;
+    border-radius: 12px;
+    padding: 4px;
+  }
+
+  .constellation-card {
+    width: 65px;
+    height: 90px;
+  }
+
+  .clay-journey-section {
+    padding: 4rem 1rem;
+    min-height: 80vh;
+  }
+
+  .clay-journey-content {
+    padding: 1.5rem 1rem;
+    border-radius: 20px;
+    gap: 0.75rem;
+  }
+}
