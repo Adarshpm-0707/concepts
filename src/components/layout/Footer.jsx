@@ -23,7 +23,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-black border-t border-white/20 text-slate-400 font-body relative overflow-hidden pt-10 pb-8 sm:pt-16 sm:pb-12">
+    <footer className="bg-black border-t border-white/20 text-slate-400 font-body relative overflow-hidden pt-14 pb-10 sm:pt-20 sm:pb-14">
       {/* MONOCHROME INTERACTIVE SHAPE GRID CANVAS */}
       <ShapeGridCanvas />
 

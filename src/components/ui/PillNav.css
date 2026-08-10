@@ -61,6 +61,7 @@
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8);
   border: 1px solid rgba(255, 255, 255, 0.3);
   text-decoration: none;
+  flex-shrink: 0;
 }
 
 .pill-logo img, .pill-logo .logo-icon {
@@ -74,6 +75,7 @@
   list-style: none;
   display: flex;
   align-items: stretch;
+  justify-content: space-evenly;
   gap: var(--pill-gap);
   margin: 0;
   padding: 0;
@@ -82,6 +84,9 @@
 
 .pill-list > li {
   display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
   height: 100%;
 }
 
@@ -90,6 +95,7 @@
   align-items: center;
   justify-content: center;
   height: 100%;
+  width: 100%;
   padding: 0 var(--pill-pad-x);
   background: var(--pill-bg, #000000);
   color: var(--pill-text, #ffffff);
