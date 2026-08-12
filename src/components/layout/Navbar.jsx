@@ -22,7 +22,7 @@ export default function Navbar() {
       pillColor="#000000"
       hoveredPillTextColor="#000000"
       pillTextColor="#ffffff"
-      initialLoadAnimation={true}
+      initialLoadAnimation={false}
     />
   );
 }

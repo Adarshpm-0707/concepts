@@ -7,7 +7,7 @@ export const brandData = {
   phoneKerala: "+91 98765 43210",
   phoneGCC: "+971 50 123 4567",
   whatsappLink: "https://wa.me/919876543210?text=Hello%20Aleef%20Concepts%2C%20I%20want%20to%20start%20a%20project.",
-  email: "hello@aleefconcepts.com",
+  email: "info@aleefconcepts.com",
   addressKerala: "Kannur, Kerala, India",
   addressGCC: "GCC Regional Support & Remote Operations",
   officeHours: "Mon - Sat: 9:00 AM - 6:30 PM",
@@ -144,13 +144,16 @@ export const coreValuesData = {
 };
 
 export const servicesData = {
-  eyebrow: "Our Services",
+  eyebrow: "Our Core Services",
   title: "Branding, Development & Marketing — Under One Strategy",
   subtitle: "Whether as a full package or individually, we deliver services tailored to your budget and growth stage.",
+  categories: ["All", "Branding", "Digital Marketing", "Development", "Video & Media"],
   services: [
     {
       id: "branding",
       icon: "Palette",
+      category: "Branding",
+      tag: "Identity & Positioning",
       title: "Branding",
       headline: "Give your business a face people remember",
       description: "A name and a logo are the start, not the finish. We build the full identity — positioning, visual language, tone of voice, brand guidelines — so every touchpoint looks like it belongs to the same company. This is where 'just another business' becomes a brand people recognise on sight.",
@@ -159,11 +162,17 @@ export const servicesData = {
         "Visual Language & Logo Systems",
         "Tone of Voice & Messaging",
         "Comprehensive Brand Guidelines"
-      ]
+      ],
+      deliverables: ["Brand Identity Manual", "Vector Logo Suite", "Color System", "Typography Spec"],
+      stats: { value: "100%", label: "Asset Ownership" },
+      badgeColor: "border-amber-500/40 text-amber-300 bg-amber-500/10",
+      accentGlow: "rgba(245, 158, 11, 0.15)"
     },
     {
       id: "digital-marketing",
       icon: "Megaphone",
+      category: "Digital Marketing",
+      tag: "Growth & Traffic",
       title: "Digital Marketing",
       headline: "Get found by the people already looking for you",
       description: "SEO, paid ads, social media, content — run separately, they compete for budget. Run together, under one strategy, they compound. We plan campaigns around what your business actually sells, not what looks good on a report. Fewer vanity metrics. More enquiries.",
@@ -172,11 +181,17 @@ export const servicesData = {
         "Performance Meta & Google Ads",
         "Social Media Strategy & Management",
         "Lead Generation & Enquiry Funnels"
-      ]
+      ],
+      deliverables: ["High ROI Lead Funnels", "Meta & Google Ads", "Weekly Performance Reports"],
+      stats: { value: "3.5x", label: "Lead Growth" },
+      badgeColor: "border-emerald-500/40 text-emerald-300 bg-emerald-500/10",
+      accentGlow: "rgba(16, 185, 129, 0.15)"
     },
     {
       id: "website-development",
       icon: "Code2",
+      category: "Development",
+      tag: "High-Speed Web",
       title: "Website Development",
       headline: "A website that sells while you sleep",
       description: "Most business websites are digital brochures nobody reads. We build sites that load fast, rank on Google, and guide visitors toward one clear action — call, enquire, or buy. Clean code, mobile-first design, and copy that says something, every time.",
@@ -185,11 +200,17 @@ export const servicesData = {
         "Mobile-First Custom Design",
         "SEO & High Conversion Architecture",
         "Persuasive Strategic Copywriting"
-      ]
+      ],
+      deliverables: ["Custom Next/Vite Web App", "100% Mobile Optimized", "SEO-Ready Architecture"],
+      stats: { value: "< 1.2s", label: "Load Speed" },
+      badgeColor: "border-cyan-500/40 text-cyan-300 bg-cyan-500/10",
+      accentGlow: "rgba(6, 182, 212, 0.15)"
     },
     {
       id: "app-development",
       icon: "Zap",
+      category: "Development",
+      tag: "iOS & Android",
       title: "App Development",
       headline: "Put your business in your customer's pocket",
       description: "From idea to app store, we design and build mobile apps that people actually keep on their phones — intuitive, fast, and built around what your users need to do, not what looks impressive in a pitch deck.",
@@ -198,11 +219,17 @@ export const servicesData = {
         "User-Centric UI/UX Design",
         "High-Speed Scalable Backend",
         "App Store & Play Store Deployment"
-      ]
+      ],
+      deliverables: ["Cross-Platform App", "Scalable Cloud APIs", "App Store Publishing"],
+      stats: { value: "iOS & Android", label: "Multi-Platform" },
+      badgeColor: "border-purple-500/40 text-purple-300 bg-purple-500/10",
+      accentGlow: "rgba(168, 85, 247, 0.15)"
     },
     {
       id: "crm-solutions",
       icon: "ShieldAlert",
+      category: "Development",
+      tag: "Sales Automation",
       title: "CRM Solutions",
       headline: "Stop losing customers in spreadsheets and WhatsApp chats",
       description: "We set up CRM systems that track every lead, every follow-up, every sale — so nothing slips through because someone forgot to call back. Built around how your team actually sells, not a generic template.",
@@ -211,11 +238,17 @@ export const servicesData = {
         "Lead Tracking & Sales Pipelines",
         "Automated Follow-Up Workflows",
         "Team Sales Enablement & Support"
-      ]
+      ],
+      deliverables: ["Pipeline Automation", "WhatsApp/Email Triggers", "Sales Team Training"],
+      stats: { value: "0%", label: "Lost Leads" },
+      badgeColor: "border-rose-500/40 text-rose-300 bg-rose-500/10",
+      accentGlow: "rgba(244, 63, 94, 0.15)"
     },
     {
       id: "video-production",
       icon: "Share2",
+      category: "Video & Media",
+      tag: "Cinematic Media",
       title: "Video Production",
       headline: "Tell your story in the format people actually watch",
       description: "Brand films, product videos, social content, ad creatives — shot and edited to hold attention in the first three seconds and hold it there. Built for how your audience watches: mostly on a phone, mostly with the sound off.",
@@ -224,7 +257,11 @@ export const servicesData = {
         "High-Impact Product Videos",
         "Short-Form Ad & Social Creatives",
         "Mobile-First Video Strategy"
-      ]
+      ],
+      deliverables: ["4K Brand Reel", "Short-Form Social Edits", "Color Grading & Sound Design"],
+      stats: { value: "4K UHD", label: "High Definition" },
+      badgeColor: "border-blue-500/40 text-blue-300 bg-blue-500/10",
+      accentGlow: "rgba(59, 130, 246, 0.15)"
     }
   ]
 };
@@ -415,26 +452,6 @@ export const faqData = {
       question: "5. Can you handle branding and marketing together, or only separately?",
       answer: "Both. Most clients start with one service and expand once they see results — but branding and marketing genuinely work better designed together from the start."
     },
-    {
-      question: "6. Do you build custom CRM systems or use existing platforms?",
-      answer: "We typically configure and customise proven CRM platforms around your sales process, rather than building one from scratch — it's faster to deploy and easier to maintain."
-    },
-    {
-      question: "7. What industries have you worked with?",
-      answer: "Startups, SMEs, healthcare, education, retail, real estate, restaurants, manufacturing, and personal brands — the approach adapts, the standard doesn't."
-    },
-    {
-      question: "8. How much does a project cost?",
-      answer: "It depends on scope. Share your requirements and we'll send a clear proposal with pricing — no vague ranges, no hidden add-ons later."
-    },
-    {
-      question: "9. Will I own the website, app, or brand assets you build?",
-      answer: "Yes. Once a project is complete and paid for, all assets, code, and files belong to you."
-    },
-    {
-      question: "10. How do we get started?",
-      answer: "Fill out the contact form or call us. We'll set up a short discovery call to understand your business before proposing anything."
-    }
   ]
 };
 

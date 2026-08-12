@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import { Briefcase, ArrowRight, CheckCircle2, Send, MapPin, Clock } from 'lucide-react';
 import PageHeader from '../components/common/PageHeader';
 import Button from '../components/common/Button';
-import CTA from '../components/sections/CTA';
 import { careersData } from '../data/content';
 
 export default function CareersPage() {
@@ -154,8 +153,6 @@ export default function CareersPage() {
 
         </div>
       </section>
-
-      <CTA />
     </>
   );
 }

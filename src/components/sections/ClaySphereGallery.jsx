@@ -12,7 +12,7 @@ const projectsData = [
     category: "Healthcare & Tech",
     location: "Kannur, Kerala",
     result: "+320% Inquiries",
-    desc: "Full digital rebranding and high-converting patient inquiry funnels for North Malabar's premier multi-specialty medical center.",
+    desc: "Full digital rebranding and high-converting patient inquiry funnels for North Malabar's multi-specialty medical center.",
     img: "/assets/WhatsApp Image 2026-08-06 at 2.59.53 PM.jpeg"
   },
   {
@@ -111,7 +111,7 @@ const projectsData = [
     category: "Branding & Package",
     location: "Kerala & UAE",
     result: "+310% Orders",
-    desc: "Bespoke brand guidelines, premium packaging design, and performance social ads driving exceptional customer loyalty.",
+    desc: "Bespoke brand guidelines, custom packaging design, and performance social ads driving exceptional customer loyalty.",
     img: "/assets/WhatsApp Image 2026-08-06 at 3.04.21 PM.jpeg"
   },
   {

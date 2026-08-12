@@ -8,7 +8,6 @@ import WhyChooseUs from './WhyChooseUs';
 import Services from './Services';
 import PortfolioIntro from './PortfolioIntro';
 import Testimonials from './Testimonials';
-import CTA from './CTA';
 import Contact from './Contact';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -208,8 +207,7 @@ export default function AleefSkewHome() {
           <h2 className="heading">
             Ready to work with Kannur's #1 digital marketing office? Let's turn your story into revenue®.
           </h2>
-          <CTA />
-          <div className="mt-12">
+          <div className="mt-6">
             <Contact />
           </div>
         </div>

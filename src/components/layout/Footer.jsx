@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import ShapeGridCanvas from '../ui/ShapeGridCanvas';
 import { brandData, navLinks, servicesData } from '../../data/content';
-import logoImg from '../../assets/logo-black.png';
+import logoImg from '../../assets/text aleef.png';
 
 const socialIconMap = { Instagram, Linkedin, Facebook, Twitter, Youtube };
 
@@ -37,11 +37,12 @@ export default function Footer() {
         <div className="hidden md:grid grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12 pb-8 sm:pb-12 border-b border-neutral-800">
           {/* Brand Info */}
           <div className="lg:col-span-2 space-y-3.5 sm:space-y-4">
-            <Link to="/" className="flex items-center gap-3">
-              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-white text-black flex items-center justify-center overflow-hidden p-1 shadow-md">
-                <img src={logoImg} alt="Aleef Concepts Logo" className="w-full h-full object-contain" />
-              </div>
-          
+            <Link to="/" className="inline-flex items-center focus:outline-none group">
+              <img 
+                src={logoImg} 
+                alt="Aleef Concepts Logo" 
+                className="h-10 sm:h-12 lg:h-14 w-auto max-w-[240px] sm:max-w-[280px] object-contain transition-transform duration-300 group-hover:scale-[1.02]" 
+              />
             </Link>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-md">
               {brandData.heroSubtitle}
@@ -128,23 +129,22 @@ export default function Footer() {
           
           {/* Mobile Brand Card Header */}
           <div className="p-5 rounded-2xl bg-neutral-900/90 border border-white/20 backdrop-blur-md space-y-3.5 shadow-xl">
-            <div className="flex items-center justify-between">
-              <Link to="/" className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-white text-black flex items-center justify-center overflow-hidden p-1 shadow-md">
-                  <img src={logoImg} alt="Aleef Concepts Logo" className="w-full h-full object-contain" />
-                </div>
-                <span className="font-heading font-extrabold text-lg text-white tracking-tight">
-                  Aleef <span className="text-slate-400 font-light">Concepts</span>
-                </span>
+            <div className="flex items-center justify-between gap-3">
+              <Link to="/" className="flex items-center focus:outline-none">
+                <img 
+                  src={logoImg} 
+                  alt="Aleef Concepts Logo" 
+                  className="h-8 sm:h-9 w-auto max-w-[180px] object-contain" 
+                />
               </Link>
-              <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-[10px] font-bold text-emerald-400">
+              <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-[10px] font-bold text-emerald-400 flex-shrink-0">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                 <span>Kannur Office</span>
               </div>
             </div>
 
             <p className="text-xs text-slate-300 leading-relaxed">
-              Kannur's premier digital marketing agency scaling brands across Kerala & GCC.
+              Kannur's digital marketing agency scaling brands across Kerala & GCC.
             </p>
 
             {/* Quick Touch Action Buttons for Mobile */}
@@ -257,7 +257,7 @@ export default function Footer() {
         {/* BOTTOM COPYRIGHT STRIP (ALL VIEWS) */}
         {/* ========================================================================= */}
         <div className="pt-6 sm:pt-8 flex flex-col sm:flex-row items-center justify-between text-[11px] sm:text-xs text-slate-400 gap-3 sm:gap-4 text-center sm:text-left">
-          <p>© {year} {brandData.name}. All rights reserved. Kannur's Premier Digital Marketing Agency.</p>
+          <p>© {year} {brandData.name}. All rights reserved. Kannur's Digital Marketing Agency.</p>
           
           <div className="flex items-center gap-3">
             <span className="text-[10px] sm:text-xs text-slate-400">Kannur • Kerala • GCC</span>
