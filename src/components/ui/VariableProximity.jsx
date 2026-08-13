@@ -63,6 +63,8 @@ const VariableProximity = forwardRef((props, ref) => {
   const currentFalloffsRef = useRef([]);
   const interpolatedSettingsRef = useRef([]);
   const mousePositionRef = useMousePositionRef(effectiveContainerRef);
+  // PERF: track whether the element is on-screen at all
+  const isVisibleRef = useRef(false);
 
   const parsedSettings = useMemo(() => {
     const parseSettings = settingsStr =>
@@ -102,47 +104,61 @@ const VariableProximity = forwardRef((props, ref) => {
   };
 
   useEffect(() => {
+    // PERF: IntersectionObserver — only animate when the component is in viewport
+    const observer = new IntersectionObserver(
+      ([entry]) => { isVisibleRef.current = entry.isIntersecting; },
+      { threshold: 0.1 }
+    );
+    if (localWrapperRef.current) observer.observe(localWrapperRef.current);
+
     let frameId;
     let isRunning = true;
 
     const loop = () => {
       if (!isRunning) return;
 
-      // Only perform letter calculations if mouse is active or lerping is in progress
-      if (mousePositionRef.current.active && effectiveContainerRef?.current) {
+      // PERF: Skip all work when off-screen or mouse inactive
+      if (isVisibleRef.current && mousePositionRef.current.active && effectiveContainerRef?.current) {
         const containerRect = effectiveContainerRef.current.getBoundingClientRect();
         const { x, y } = mousePositionRef.current;
 
-        letterRefs.current.forEach((letterRef, index) => {
-          if (!letterRef) return;
+        // PERF: Early-exit if mouse is far from the container bounding box
+        const expanded = radius + 20;
+        if (
+          x > -expanded && x < containerRect.width + expanded &&
+          y > -expanded && y < containerRect.height + expanded
+        ) {
+          letterRefs.current.forEach((letterRef, index) => {
+            if (!letterRef) return;
 
-          const rect = letterRef.getBoundingClientRect();
-          const letterCenterX = rect.left + rect.width / 2 - containerRect.left;
-          const letterCenterY = rect.top + rect.height / 2 - containerRect.top;
+            const rect = letterRef.getBoundingClientRect();
+            const letterCenterX = rect.left + rect.width / 2 - containerRect.left;
+            const letterCenterY = rect.top + rect.height / 2 - containerRect.top;
 
-          const distance = calculateDistance(x, y, letterCenterX, letterCenterY);
+            const distance = calculateDistance(x, y, letterCenterX, letterCenterY);
 
-          let targetFalloff = 0;
-          if (distance < radius) {
-            targetFalloff = calculateFalloff(distance);
-          }
+            let targetFalloff = 0;
+            if (distance < radius) {
+              targetFalloff = calculateFalloff(distance);
+            }
 
-          const prevFalloff = currentFalloffsRef.current[index] || 0;
-          const lerpedFalloff = prevFalloff + (targetFalloff - prevFalloff) * 0.18;
-          currentFalloffsRef.current[index] = lerpedFalloff;
+            const prevFalloff = currentFalloffsRef.current[index] || 0;
+            const lerpedFalloff = prevFalloff + (targetFalloff - prevFalloff) * 0.18;
+            currentFalloffsRef.current[index] = lerpedFalloff;
 
-          const newSettings = parsedSettings
-            .map(({ axis, fromValue, toValue }) => {
-              const interpolatedValue = fromValue + (toValue - fromValue) * lerpedFalloff;
-              return `'${axis}' ${interpolatedValue.toFixed(1)}`;
-            })
-            .join(', ');
+            const newSettings = parsedSettings
+              .map(({ axis, fromValue, toValue }) => {
+                const interpolatedValue = fromValue + (toValue - fromValue) * lerpedFalloff;
+                return `'${axis}' ${interpolatedValue.toFixed(1)}`;
+              })
+              .join(', ');
 
-          if (interpolatedSettingsRef.current[index] !== newSettings) {
-            interpolatedSettingsRef.current[index] = newSettings;
-            letterRef.style.fontVariationSettings = newSettings;
-          }
-        });
+            if (interpolatedSettingsRef.current[index] !== newSettings) {
+              interpolatedSettingsRef.current[index] = newSettings;
+              letterRef.style.fontVariationSettings = newSettings;
+            }
+          });
+        }
       }
 
       frameId = requestAnimationFrame(loop);
@@ -152,6 +168,7 @@ const VariableProximity = forwardRef((props, ref) => {
     return () => {
       isRunning = false;
       cancelAnimationFrame(frameId);
+      observer.disconnect();
     };
   }, [effectiveContainerRef, parsedSettings, radius, falloff]);
 

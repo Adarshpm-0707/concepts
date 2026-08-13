@@ -21,25 +21,28 @@ const SHADOWS = { sm: [5, 12, 0.3], md: [10, 24, 0.4], lg: [16, 40, 0.52] };
 
 const THEMES = {
   dark: {
-    backgroundColor: '#111111',
-    textColor: '#ffffff',
+    backgroundColor: '#1B1722',
+    textColor: '#f5f5f5',
     placeholderColor: '#a1a1aa',
-    borderColor: '#333333',
-    buttonColor: '#ffffff',
-    buttonTextColor: '#000000',
+    borderColor: '#392e4e',
+    buttonColor: '#A855F7',
+    buttonTextColor: '#ffffff',
     shadowColor: '#000000'
   },
   light: {
     backgroundColor: '#ffffff',
-    textColor: '#000000',
-    placeholderColor: '#666666',
-    borderColor: '#000000',
-    buttonColor: '#000000',
+    textColor: '#1d2050',
+    placeholderColor: '#9aa0b6',
+    borderColor: '#262a56',
+    buttonColor: '#4763eb',
     buttonTextColor: '#ffffff',
-    shadowColor: '#000000'
+    shadowColor: '#0b0e2a'
   }
 };
 
+// Maps the flat coordinate space (u: 0..W along the bar, v: offset from the
+// centerline, positive down) onto a circular arc with the given sagitta
+// (`bend`, in px). Positive bend arches up, negative sags down, 0 is flat.
 const buildGeometry = (width, bend, thickness, pad) => {
   const W = width;
   const T = thickness;
@@ -94,6 +97,7 @@ const fmt = (g, u, v) => {
   return `${round2(x)} ${round2(y)}`;
 };
 
+// Segment along a constant-v edge, as a circular arc (or a line when flat)
 const edgeSeg = (g, uTo, v, ltr) => {
   if (g.straight) return `L ${fmt(g, uTo, v)}`;
   const rho = round2(g.R - g.dir * v);
@@ -101,6 +105,8 @@ const edgeSeg = (g, uTo, v, ltr) => {
   return `A ${rho} ${rho} 0 0 ${sweep} ${fmt(g, uTo, v)}`;
 };
 
+// A rectangle bent along the arc: circular top/bottom edges, radial end caps
+// and quadratic rounded corners.
 const bentRectPath = (g, u0, u1, vTop, vBot, radius) => {
   const rc = Math.max(0, Math.min(radius, (vBot - vTop) / 2, (u1 - u0) / 2));
   return [
@@ -197,6 +203,7 @@ const CurvedInput = ({
     return () => ro.disconnect();
   }, []);
 
+  // Re-measure once webfonts finish loading
   useEffect(() => {
     let alive = true;
     if (document.fonts?.ready) {
@@ -228,6 +235,8 @@ const CurvedInput = ({
     return { btnInset, chipH, chipW, iconU, textStartU, textEndU, btnU0, btnU1, winLen };
   }, [geom, height, borderWidth, btnTextW, fontSize, showIcon, showButton]);
 
+  // Measure rendered text to keep the caret on the curve and scroll long
+  // values along the arc, exactly like a native input would.
   useLayoutEffect(() => {
     if (btnMeasureRef.current) {
       const bw = btnMeasureRef.current.getComputedTextLength();
@@ -278,6 +287,8 @@ const CurvedInput = ({
     if (onSubmit) onSubmit(val);
   };
 
+  // Click on the curve: focus the hidden input and drop the caret on the
+  // character closest to the click, measured in arc length.
   const handleSurfaceClick = e => {
     const input = inputRef.current;
     if (!input) return;
@@ -307,6 +318,7 @@ const CurvedInput = ({
     try {
       input.setSelectionRange(idx, idx);
     } catch {
+      /* selection API unavailable for this input type */
     }
     setCaretIndex(idx);
   };
@@ -380,14 +392,14 @@ const CurvedInput = ({
                   height={eh}
                   rx={1.4}
                   fill="none"
-                  stroke={btnFgColor}
+                  stroke="#ffffff"
                   strokeWidth={sw}
                   strokeLinejoin="round"
                 />
                 <path
                   d={`M ${round2(-ew / 2)} ${round2(-eh / 2 + sw * 0.4)} L 0 ${round2(eh * 0.14)} L ${round2(ew / 2)} ${round2(-eh / 2 + sw * 0.4)}`}
                   fill="none"
-                  stroke={btnFgColor}
+                  stroke="#ffffff"
                   strokeWidth={sw}
                   strokeLinejoin="round"
                   strokeLinecap="round"

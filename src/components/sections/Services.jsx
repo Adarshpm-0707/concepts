@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { motion } from 'framer-motion';
 import {
   Megaphone, Search, BarChart3, Share2, Palette, Code2, Zap, ShieldAlert,
   ArrowRight, CheckCircle2, X, Sparkles, ExternalLink, Phone, MessageSquare
@@ -12,9 +13,81 @@ import '../../styles/sections.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Animation variants for card text elements — staggered fade+slide up
+const cardTextVariants = {
+  hidden: { opacity: 0, y: 22, filter: 'blur(6px)' },
+  visible: (delay = 0) => ({
+    opacity: 1,
+    y: 0,
+    filter: 'blur(0px)',
+    transition: {
+      duration: 0.55,
+      delay,
+      ease: [0.22, 1, 0.36, 1]
+    }
+  })
+};
+
 const iconMap = {
   Palette, Megaphone, Code2, Zap, ShieldAlert, Share2, Search, BarChart3
 };
+
+const CARD_COLOR_THEMES = [
+  {
+    bgGradient: "bg-gradient-to-br from-purple-950/95 via-violet-900/80 to-purple-950/95",
+    borderColor: "border-purple-500/40 group-hover:border-purple-400",
+    glowColor: "rgba(168, 85, 247, 0.45)",
+    iconBg: "bg-purple-900/90 border-purple-400/50 text-purple-200",
+    badgeStyle: "border-purple-400/50 text-purple-200 bg-purple-500/20",
+    titleHover: "group-hover:text-purple-300",
+    quoteBg: "bg-purple-900/40 border-purple-400/30"
+  },
+  {
+    bgGradient: "bg-gradient-to-br from-pink-950/95 via-fuchsia-900/80 to-pink-950/95",
+    borderColor: "border-pink-500/40 group-hover:border-pink-400",
+    glowColor: "rgba(236, 72, 153, 0.45)",
+    iconBg: "bg-pink-900/90 border-pink-400/50 text-pink-200",
+    badgeStyle: "border-pink-400/50 text-pink-200 bg-pink-500/20",
+    titleHover: "group-hover:text-pink-300",
+    quoteBg: "bg-pink-900/40 border-pink-400/30"
+  },
+  {
+    bgGradient: "bg-gradient-to-br from-rose-950/95 via-red-900/80 to-rose-950/95",
+    borderColor: "border-rose-500/40 group-hover:border-rose-400",
+    glowColor: "rgba(244, 63, 94, 0.45)",
+    iconBg: "bg-rose-900/90 border-rose-400/50 text-rose-200",
+    badgeStyle: "border-rose-400/50 text-rose-200 bg-rose-500/20",
+    titleHover: "group-hover:text-rose-300",
+    quoteBg: "bg-rose-900/40 border-rose-400/30"
+  },
+  {
+    bgGradient: "bg-gradient-to-br from-red-950/95 via-orange-900/80 to-amber-950/95",
+    borderColor: "border-orange-500/40 group-hover:border-orange-400",
+    glowColor: "rgba(249, 115, 22, 0.45)",
+    iconBg: "bg-orange-900/90 border-orange-400/50 text-orange-200",
+    badgeStyle: "border-orange-400/50 text-orange-200 bg-orange-500/20",
+    titleHover: "group-hover:text-amber-300",
+    quoteBg: "bg-orange-900/40 border-orange-400/30"
+  },
+  {
+    bgGradient: "bg-gradient-to-br from-fuchsia-950/95 via-purple-900/80 to-fuchsia-950/95",
+    borderColor: "border-fuchsia-500/40 group-hover:border-fuchsia-400",
+    glowColor: "rgba(217, 70, 239, 0.45)",
+    iconBg: "bg-fuchsia-900/90 border-fuchsia-400/50 text-fuchsia-200",
+    badgeStyle: "border-fuchsia-400/50 text-fuchsia-200 bg-fuchsia-500/20",
+    titleHover: "group-hover:text-fuchsia-300",
+    quoteBg: "bg-fuchsia-900/40 border-fuchsia-400/30"
+  },
+  {
+    bgGradient: "bg-gradient-to-br from-indigo-950/95 via-violet-900/80 to-indigo-950/95",
+    borderColor: "border-indigo-500/40 group-hover:border-indigo-400",
+    glowColor: "rgba(99, 102, 241, 0.45)",
+    iconBg: "bg-indigo-900/90 border-indigo-400/50 text-indigo-200",
+    badgeStyle: "border-indigo-400/50 text-indigo-200 bg-indigo-500/20",
+    titleHover: "group-hover:text-indigo-300",
+    quoteBg: "bg-indigo-900/40 border-indigo-400/30"
+  }
+];
 
 export default function Services({ showHeader = true }) {
   const sectionRef = useRef(null);
@@ -28,7 +101,7 @@ export default function Services({ showHeader = true }) {
 
       const track = container.querySelector('.horizontal-services-track');
       const cards = container.querySelectorAll('.horizontal-service-card');
-      const letters = container.querySelectorAll('.horizontal-letter');
+      // PERF: removed per-character .horizontal-letter query — was creating ~90 ScrollTriggers
       const badges = container.querySelectorAll('.horizontal-badge');
 
       if (!track) return;
@@ -41,7 +114,7 @@ export default function Services({ showHeader = true }) {
         return -(track.scrollWidth - window.innerWidth + padding);
       };
 
-      // 2. GSAP ScrollTrigger Pinned Horizontal Tween for ALL VIEWPORTS (Mobile, Tablet, Desktop)
+      // 2. GSAP ScrollTrigger Pinned Horizontal Tween for ALL VIEWPORTS
       const scrollTween = gsap.to(track, {
         x: getScrollAmount,
         ease: 'none',
@@ -57,23 +130,7 @@ export default function Services({ showHeader = true }) {
         }
       });
 
-      // 3. Elastic Bouncing Effect for Individual Letters on Scroll
-      letters.forEach((letter) => {
-        gsap.from(letter, {
-          yPercent: (Math.random() - 0.5) * (isMobile ? 140 : 350),
-          rotation: (Math.random() - 0.5) * (isMobile ? 25 : 50),
-          ease: 'elastic.out(1.2, 1)',
-          scrollTrigger: {
-            trigger: letter,
-            containerAnimation: scrollTween,
-            start: 'left 95%',
-            end: 'left 15%',
-            scrub: 0.5
-          }
-        });
-      });
-
-      // 4. Elastic Bouncing Effect for Badges and Floating Tags
+      // 3. Elastic Bouncing Effect for Badges (reduced from ~90 ScrollTriggers to 6)
       badges.forEach((badge) => {
         gsap.from(badge, {
           scale: 0.3,
@@ -90,7 +147,7 @@ export default function Services({ showHeader = true }) {
         });
       });
 
-      // 5. Elastic Entrance Scale for Cards as they enter viewport
+      // 4. Elastic Entrance Scale & Staggered Text Entrance for Cards
       cards.forEach((card) => {
         gsap.fromTo(card,
           { scale: isMobile ? 0.94 : 0.88, opacity: 0.6, y: 20 },
@@ -108,6 +165,28 @@ export default function Services({ showHeader = true }) {
             }
           }
         );
+
+        // Staggered text elements reveal inside each service card as it enters view
+        const cardAnimItems = card.querySelectorAll('.card-anim-item');
+        if (cardAnimItems.length > 0) {
+          gsap.fromTo(cardAnimItems,
+            { opacity: 0, y: 18, filter: 'blur(4px)' },
+            {
+              opacity: 1,
+              y: 0,
+              filter: 'blur(0px)',
+              stagger: 0.08,
+              ease: 'power2.out',
+              scrollTrigger: {
+                trigger: card,
+                containerAnimation: scrollTween,
+                start: 'left 90%',
+                end: 'left 45%',
+                scrub: 0.5
+              }
+            }
+          );
+        }
       });
 
       ScrollTrigger.refresh();
@@ -115,6 +194,7 @@ export default function Services({ showHeader = true }) {
 
     return () => ctx.revert();
   }, []);
+
 
   return (
     <section
@@ -149,82 +229,39 @@ export default function Services({ showHeader = true }) {
           </div>
         )}
 
-        {/* Unified GSAP Horizontal Track (Mobile, Tablet, Laptop, Desktop) */}
         <div
           ref={containerRef}
           className="horizontal-services-track flex items-stretch gap-4 sm:gap-8 lg:gap-10 px-4 sm:px-12 lg:px-16 w-max flex-nowrap overflow-visible pb-4 lg:pb-8"
         >
           
-          {/* INTRO BANNER CARD */}
-          <div className="horizontal-service-intro w-[82vw] min-w-[270px] sm:min-w-[460px] lg:min-w-[540px] max-w-[320px] sm:max-w-none p-5 sm:p-10 lg:p-12 rounded-2xl sm:rounded-3xl bg-neutral-950 border border-white/20 flex flex-col justify-between shrink-0 shadow-2xl relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-[80px] pointer-events-none" />
-            
-            <div>
-              <span className="horizontal-badge inline-block px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-3 sm:mb-6">
-                Aleef Concepts • Kannur & GCC
-              </span>
+         
 
-              {/* Bouncing Animated Letters Header */}
-              <h3 className="font-heading font-black text-2xl sm:text-4xl lg:text-5xl text-white leading-tight mb-3 sm:mb-6">
-                {"We Build Growth Systems That Scale".split(" ").map((word, wIdx) => (
-                  <span key={wIdx} className="inline-block whitespace-nowrap mr-2 sm:mr-3">
-                    {word.split("").map((char, cIdx) => (
-                      <span
-                        key={cIdx}
-                        className="horizontal-letter inline-block"
-                        style={{ position: 'relative' }}
-                      >
-                        {char}
-                      </span>
-                    ))}
-                  </span>
-                ))}
-              </h3>
-
-              <p className="text-xs sm:text-base text-slate-300 leading-relaxed max-w-md">
-                Branding, web development, and performance digital marketing working together under one roof, one strategy, one point of contact.
-              </p>
-            </div>
-
-            <div className="pt-4 sm:pt-8 border-t border-white/10 flex items-center justify-between mt-4 sm:mt-0">
-              <span className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-slate-400">
-                06 Core Specialties
-              </span>
-              <span className="text-[10px] sm:text-xs font-bold text-white flex items-center gap-1.5">
-                <span>Scroll Down</span>
-                <ArrowRight className="w-3.5 h-3.5 text-emerald-400" />
-              </span>
-            </div>
-          </div>
-
-          {/* SERVICE CARDS */}
           {servicesData.services.map((service, idx) => {
             const IconComponent = iconMap[service.icon] || Megaphone;
             const formattedIndex = String(idx + 1).padStart(2, '0');
+            const theme = CARD_COLOR_THEMES[idx % CARD_COLOR_THEMES.length];
 
             return (
               <article
                 key={service.id}
-                className="horizontal-service-card group relative w-[82vw] min-w-[270px] sm:min-w-[360px] lg:min-w-[440px] max-w-[320px] sm:max-w-[460px] rounded-2xl sm:rounded-3xl bg-neutral-950/90 border border-white/15 p-5 sm:p-8 lg:p-9 flex flex-col justify-between overflow-hidden shadow-2xl hover:border-white/40 transition-all duration-300 shrink-0"
+                className={`horizontal-service-card group relative w-[82vw] min-w-[270px] sm:min-w-[360px] lg:min-w-[440px] max-w-[320px] sm:max-w-[460px] rounded-2xl sm:rounded-3xl ${theme.bgGradient} ${theme.borderColor} border p-5 sm:p-8 lg:p-9 flex flex-col justify-between overflow-hidden shadow-2xl transition-all duration-300 shrink-0`}
               >
-                {/* Radial Glow Tint behind Card */}
                 <div
                   className="absolute -top-24 -right-24 w-60 h-60 rounded-full blur-[70px] pointer-events-none opacity-20 group-hover:opacity-40 transition-opacity duration-300"
-                  style={{ background: service.accentGlow || 'rgba(255,255,255,0.15)' }}
+                  style={{ background: theme.glowColor }}
                 />
 
                 <div>
-                  {/* Top Header Row with Bouncing Badge */}
-                  <div className="flex items-center justify-between gap-3 mb-4 sm:mb-6">
+                  <div className="card-anim-item flex items-center justify-between gap-3 mb-4 sm:mb-6">
                     <div className="flex items-center gap-2.5 sm:gap-3">
-                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-neutral-900 border border-white/20 flex items-center justify-center text-white group-hover:bg-white group-hover:text-black transition-all duration-300 shadow-md shrink-0">
+                      <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl ${theme.iconBg} flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all duration-300 shadow-md shrink-0`}>
                         <IconComponent className="w-5 h-5 sm:w-6 sm:h-6" />
                       </div>
                       <div>
                         <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400 block">
                           {service.tag || service.category}
                         </span>
-                        <span className={`horizontal-badge inline-block mt-0.5 sm:mt-1 text-[9px] sm:text-[10px] font-bold px-2 sm:px-2.5 py-0.5 rounded-full border ${service.badgeColor || 'border-white/20 text-slate-300'}`}>
+                        <span className={`horizontal-badge inline-block mt-0.5 sm:mt-1 text-[9px] sm:text-[10px] font-bold px-2 sm:px-2.5 py-0.5 rounded-full border ${theme.badgeStyle}`}>
                           Kannur & GCC
                         </span>
                       </div>
@@ -235,40 +272,24 @@ export default function Services({ showHeader = true }) {
                     </span>
                   </div>
 
-                  {/* Bouncing Service Title Letters */}
-                  <h3 className="font-heading font-black text-xl sm:text-3xl text-white mb-2 sm:mb-3 group-hover:text-amber-300 transition-colors leading-tight">
-                    {service.title.split(" ").map((word, wIdx) => (
-                      <span key={wIdx} className="inline-block whitespace-nowrap mr-2">
-                        {word.split("").map((char, cIdx) => (
-                          <span
-                            key={cIdx}
-                            className="horizontal-letter inline-block"
-                            style={{ position: 'relative' }}
-                          >
-                            {char}
-                          </span>
-                        ))}
-                      </span>
-                    ))}
+                  <h3 className={`card-anim-item font-heading font-black text-xl sm:text-3xl text-white mb-2 sm:mb-3 ${theme.titleHover} transition-colors leading-tight group-hover:translate-x-1 duration-300`}>
+                    {service.title}
                   </h3>
 
-                  {/* Headline Quote Box */}
-                  <div className="mb-3.5 p-3 rounded-xl sm:rounded-2xl bg-white/[0.04] border border-white/10 text-xs sm:text-sm font-semibold text-slate-200 italic">
+                  <div className={`card-anim-item mb-3.5 p-3 rounded-xl sm:rounded-2xl ${theme.quoteBg} border border-white/10 text-xs sm:text-sm font-semibold text-slate-200 italic`}>
                     "{service.headline}"
                   </div>
 
-                  {/* Description */}
-                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-4 sm:mb-6 line-clamp-3 group-hover:text-slate-200 transition-colors">
+                  <p className="card-anim-item text-xs sm:text-sm text-slate-300 leading-relaxed mb-4 sm:mb-6 line-clamp-3 group-hover:text-slate-200 transition-colors">
                     {service.description}
                   </p>
 
-                  {/* Key Solutions Checklist */}
-                  <div className="space-y-1.5 sm:space-y-2 mb-4 sm:mb-6 pt-3 sm:pt-4 border-t border-white/10">
+                  <div className="card-anim-item space-y-1.5 sm:space-y-2 mb-4 sm:mb-6 pt-3 sm:pt-4 border-t border-white/10">
                     <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1 sm:mb-2 font-heading">
                       Key Deliverables:
                     </span>
                     {service.features.slice(0, 3).map((feat, fIdx) => (
-                      <div key={fIdx} className="flex items-center gap-2 text-[11px] sm:text-xs text-slate-300">
+                      <div key={fIdx} className="flex items-center gap-2 text-[11px] sm:text-xs text-slate-300 group-hover:translate-x-0.5 transition-transform">
                         <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                         <span className="truncate">{feat}</span>
                       </div>
@@ -276,8 +297,7 @@ export default function Services({ showHeader = true }) {
                   </div>
                 </div>
 
-                {/* Bottom Action Footer */}
-                <div className="pt-3 sm:pt-4 border-t border-white/10 flex items-center justify-between gap-2 sm:gap-3 mt-auto">
+                <div className="card-anim-item pt-3 sm:pt-4 border-t border-white/10 flex items-center justify-between gap-2 sm:gap-3 mt-auto">
                   <Link
                     to={`/services/${service.id}`}
                     className="flex-1 inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3.5 sm:px-5 py-2.5 sm:py-3 rounded-full bg-white text-black font-heading font-bold text-xs sm:text-sm hover:bg-slate-200 transition-colors shadow-md"
@@ -297,43 +317,6 @@ export default function Services({ showHeader = true }) {
             );
           })}
 
-          {/* OUTRO CALL-TO-ACTION CARD */}
-          <div className="w-[82vw] min-w-[270px] sm:min-w-[360px] lg:min-w-[440px] max-w-[320px] sm:max-w-none p-5 sm:p-10 lg:p-12 rounded-2xl sm:rounded-3xl bg-neutral-950 border border-white/20 flex flex-col justify-between shrink-0 shadow-2xl text-center relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-[80px] pointer-events-none" />
-            
-            <div className="my-auto space-y-3 sm:space-y-4">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-[10px] sm:text-xs font-bold text-slate-200">
-                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                <span>Ready to Start?</span>
-              </span>
-
-              <h3 className="font-heading font-black text-xl sm:text-4xl text-white leading-tight">
-                Need a Custom Package Strategy?
-              </h3>
-
-              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-sm mx-auto">
-                We replace fragmented vendor chaos with unified execution across Kerala & GCC.
-              </p>
-
-              <div className="pt-3 sm:pt-4 flex flex-col gap-2.5 sm:gap-3">
-                <Link
-                  to="/contact"
-                  className="w-full py-3 sm:py-3.5 px-5 sm:px-6 rounded-full bg-white text-black font-heading font-bold text-xs sm:text-sm hover:bg-slate-200 transition-colors shadow-xl text-center"
-                >
-                  Get Package Proposal
-                </Link>
-                <a
-                  href={brandData.whatsappLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full py-3 sm:py-3.5 px-5 sm:px-6 rounded-full bg-neutral-900 border border-white/20 text-white font-heading font-bold text-xs sm:text-sm hover:bg-neutral-800 transition-colors flex items-center justify-center gap-2"
-                >
-                  <MessageSquare className="w-4 h-4 text-emerald-400" />
-                  <span>Chat on WhatsApp</span>
-                </a>
-              </div>
-            </div>
-          </div>
 
         </div>
       </div>

@@ -7,6 +7,7 @@ import BorderGlow from '../ui/BorderGlow';
 import SplitFlapText from '../ui/SplitFlapText';
 import CursorGrid from '../ui/CursorGrid';
 import { heroStats } from '../../data/content';
+import '../../styles/hero.css';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -48,12 +49,10 @@ export default function Hero() {
         />
       </div>
 
-      {/* --- AMBIENT GLOW --- */}
+      {/* --- AMBIENT GLOW (pure CSS — zero JS cost) --- */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <motion.div 
-          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-          transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-          className="absolute top-[-10%] left-[-10%] w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-white/10 rounded-full blur-[80px] md:blur-[120px]" 
+        <div 
+          className="absolute top-[-10%] left-[-10%] w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-white/10 rounded-full blur-[80px] md:blur-[120px] hero-ambient-glow" 
         />
       </div>
 
@@ -196,71 +195,13 @@ export default function Hero() {
               ))}
             </div>
 
-            {/* DESKTOP: 3-column grid */}
-            <div className="hidden md:grid md:grid-cols-3 divide-x divide-white/10">
-              {/* Feature 1 */}
-              <div className="p-8 flex flex-col items-center text-center gap-0 group/item">
-                <div className="mb-4 p-3 rounded-2xl bg-white/5 text-white group-hover/item:bg-white group-hover/item:text-black transition-all duration-300">
-                  <Sparkles className="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="font-heading font-bold text-white text-lg">Visual Brand</h3>
-                  <p className="text-sm text-slate-400 mt-1">Identity systems that command attention.</p>
-                </div>
-              </div>
-              {/* Feature 2 */}
-              <div className="p-8 flex flex-col items-center text-center gap-0 group/item">
-                <div className="mb-4 p-3 rounded-2xl bg-white/5 text-white group-hover/item:bg-white group-hover/item:text-black transition-all duration-300">
-                  <TrendingUp className="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="font-heading font-bold text-white text-lg">Growth Ads</h3>
-                  <p className="text-sm text-slate-400 mt-1">Data-driven marketing for real ROI.</p>
-                </div>
-              </div>
-              {/* Feature 3 */}
-              <div className="p-8 flex flex-col items-center text-center gap-0 group/item">
-                <div className="mb-4 p-3 rounded-2xl bg-white/5 text-white group-hover/item:bg-white group-hover/item:text-black transition-all duration-300">
-                  <Zap className="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="font-heading font-bold text-white text-lg">Web Engine</h3>
-                  <p className="text-sm text-slate-400 mt-1">High-speed platforms built to scale.</p>
-                </div>
-              </div>
-            </div>
+              
 
-            {/* Bottom Stats Bar */}
-            <div className="bg-white/5 border-t border-white/10 px-3 py-3 md:p-4">
-              <div className="grid grid-cols-2 sm:grid-cols-4 md:flex md:flex-row justify-center gap-3 md:gap-8">
-                {heroStats.map((stat, idx) => (
-                  <div key={idx} className="flex flex-col items-center text-center md:flex-row md:gap-2">
-                    <span className="text-white font-bold text-sm md:text-base">{stat.value}</span>
-                    <span className="text-slate-400 text-[10px] md:text-[10px] uppercase tracking-wider">{stat.label}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+        
           </BorderGlow>
         </motion.div>
 
-        {/* --- TRUST FOOTER --- */}
-        <motion.div 
-          variants={itemVariants}
-          className="mt-8 md:mt-16 flex flex-row flex-wrap items-center justify-center gap-x-4 gap-y-2.5 md:gap-8 opacity-75 px-4 md:px-0 text-xs sm:text-sm"
-        >
-          <div className="flex items-center gap-1.5 text-white font-semibold text-xs md:text-sm">
-            <ShieldCheck className="w-4 h-4 text-emerald-400" /> 100% Asset Ownership
-          </div>
-          <div className="w-px h-3 bg-white/20 hidden sm:block"></div>
-          <div className="flex items-center gap-1.5 text-white font-semibold text-xs md:text-sm">
-            <Star className="w-4 h-4 fill-white text-white" /> 4.9/5 Client Rating
-          </div>
-          <div className="w-px h-3 bg-white/20 hidden sm:block"></div>
-          <div className="flex items-center gap-1.5 text-white font-semibold text-xs md:text-sm">
-            <MousePointer2 className="w-4 h-4" /> Serving Kerala & GCC
-          </div>
-        </motion.div>
+       
 
       </motion.div>
     </section>

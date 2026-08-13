@@ -4,9 +4,12 @@ export const brandData = {
   heroTitle: "Aleef Concepts is a creative agency in Kerala building brands, digital platforms, and marketing systems for companies that want to be taken seriously — in Kannur and beyond.",
   heroHeadline: "Aleef Concepts is a creative agency in Kerala building brands, digital platforms, and marketing systems for companies that want to be taken seriously — in Kannur and beyond.",
   heroSubtitle: "Branding, development, and marketing under one team, one strategy, one point of contact. Built for how business actually works today.",
-  phoneKerala: "+91 98765 43210",
-  phoneGCC: "+971 50 123 4567",
-  whatsappLink: "https://wa.me/919876543210?text=Hello%20Aleef%20Concepts%2C%20I%20want%20to%20start%20a%20project.",
+  phone1: "+91 735 695 6837",
+  phone2: "+91 963 315 2828",
+  phoneKerala: "+91 735 695 6837",
+  phoneGCC: "+91 963 315 2828",
+  whatsappNumber: "+91 73569 37700",
+  whatsappLink: "https://wa.me/917356937700?text=Hello%20Aleef%20Concepts%2C%20I%20want%20to%20start%20a%20project.",
   email: "info@aleefconcepts.com",
   addressKerala: "Kannur, Kerala, India",
   addressGCC: "GCC Regional Support & Remote Operations",
@@ -30,7 +33,6 @@ export const navLinks = [
   { label: "About", path: "/about" },
   { label: "Services", path: "/services" },
   { label: "Work", path: "/portfolio" },
-  { label: "Careers", path: "/careers" },
   { label: "Contact", path: "/contact" }
 ];
 
@@ -145,7 +147,7 @@ export const coreValuesData = {
 
 export const servicesData = {
   eyebrow: "Our Core Services",
-  title: "Branding, Development & Marketing — Under One Strategy",
+  title: "Our Services",
   subtitle: "Whether as a full package or individually, we deliver services tailored to your budget and growth stage.",
   categories: ["All", "Branding", "Digital Marketing", "Development", "Video & Media"],
   services: [
@@ -461,37 +463,4 @@ export const ctaData = {
   buttonText: "Get in Touch",
   secondaryButtonText: "Call Us Now",
   tagline: "Aleef Concepts — Kannur, Kerala | Marketing Agency in Kannur | Creative Agency in Kerala"
-};
-
-export const careersData = {
-  eyebrow: "Join Our Team",
-  title: "Careers at Aleef Concepts",
-  subtitle: "We are always looking for curious designers, developers, media creators, and strategists in Kannur and across Kerala.",
-  culture: "We believe in clear thinking, direct communication, and building work that actually moves businesses forward. No corporate bureaucracy, just focused craft.",
-  openings: [
-    {
-      role: "UI/UX & Visual Designer",
-      type: "Full-Time / Hybrid",
-      location: "Kannur, Kerala",
-      description: "Craft visual identities, brand guidelines, and high-converting web UI designs."
-    },
-    {
-      role: "Frontend Web Developer (React / Next.js)",
-      type: "Full-Time / Remote",
-      location: "Kerala",
-      description: "Build ultra-fast, responsive web interfaces with clean code and smooth animations."
-    },
-    {
-      role: "Performance Marketer & Meta/Google Ad Specialist",
-      type: "Full-Time",
-      location: "Kannur, Kerala",
-      description: "Manage paid ad campaigns, optimize conversion funnels, and analyze lead quality."
-    },
-    {
-      role: "Video Creator & Motion Editor",
-      type: "Full-Time",
-      location: "Kannur, Kerala",
-      description: "Shoot and edit brand films, product reels, and short-form ad creatives."
-    }
-  ]
 };

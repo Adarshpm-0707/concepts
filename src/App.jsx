@@ -14,7 +14,6 @@ import AboutPage from './pages/AboutPage';
 import ServicesPage from './pages/ServicesPage';
 import ServiceDetailPage from './pages/ServiceDetailPage';
 import PortfolioPage from './pages/PortfolioPage';
-import CareersPage from './pages/CareersPage';
 import ContactPage from './pages/ContactPage';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -80,18 +79,14 @@ function SmoothScroll() {
 
       forceScrollTop();
 
-      const timer1 = setTimeout(() => {
+      // PERF: Single deferred refresh instead of two setTimeouts causing double layout thrash
+      const timer = setTimeout(() => {
         forceScrollTop();
         ScrollTrigger.refresh();
-      }, 50);
-
-      const timer2 = setTimeout(() => {
-        ScrollTrigger.refresh();
-      }, 350);
+      }, 150);
 
       return () => {
-        clearTimeout(timer1);
-        clearTimeout(timer2);
+        clearTimeout(timer);
       };
     }
   }, [pathname]);
@@ -118,7 +113,6 @@ function AnimatedRoutes() {
           <Route path="/services"              element={<ServicesPage />} />
           <Route path="/services/:serviceId"   element={<ServiceDetailPage />} />
           <Route path="/portfolio"             element={<PortfolioPage />} />
-          <Route path="/careers"               element={<CareersPage />} />
           <Route path="/contact"               element={<ContactPage />} />
         </Routes>
       </motion.div>

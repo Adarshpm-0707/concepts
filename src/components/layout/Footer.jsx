@@ -108,11 +108,11 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2 sm:gap-2.5">
                 <Phone className="w-4 h-4 text-white flex-shrink-0" />
-                <a href={`tel:${brandData.phoneKerala}`} className="hover:text-white text-xs font-semibold text-white">{brandData.phoneKerala}</a>
+                <a href="tel:+917356956837" className="hover:text-white text-xs font-semibold text-white">+91 735 695 6837</a>
               </li>
               <li className="flex items-center gap-2 sm:gap-2.5">
                 <Phone className="w-4 h-4 text-white flex-shrink-0" />
-                <a href={`tel:${brandData.phoneGCC}`} className="hover:text-white text-xs text-slate-300">{brandData.phoneGCC} (GCC)</a>
+                <a href="tel:+919633152828" className="hover:text-white text-xs font-semibold text-white">+91 963 315 2828</a>
               </li>
               <li className="flex items-center gap-2 sm:gap-2.5">
                 <Mail className="w-4 h-4 text-white flex-shrink-0" />
@@ -139,12 +139,12 @@ export default function Footer() {
               </Link>
               <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-[10px] font-bold text-emerald-400 flex-shrink-0">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span>Kannur Office</span>
+                <span>Active Office</span>
               </div>
             </div>
 
-            <p className="text-xs text-slate-300 leading-relaxed">
-              Kannur's digital marketing agency scaling brands across Kerala & GCC.
+            <p className="text-xs text-slate-300 font-body leading-relaxed">
+              Branding, development, and marketing under one team, one strategy, one point of contact.
             </p>
 
             {/* Quick Touch Action Buttons for Mobile */}
@@ -226,9 +226,9 @@ export default function Footer() {
               <MapPin className="w-4 h-4 text-white flex-shrink-0 mt-0.5" />
               <span>{brandData.addressKerala}</span>
             </div>
-            <div className="flex items-center justify-between pt-1 text-slate-300">
-              <span className="font-semibold text-white">{brandData.phoneKerala}</span>
-              <span className="text-[10px] text-slate-400">GCC: {brandData.phoneGCC}</span>
+            <div className="flex flex-col gap-1 pt-1 text-slate-300">
+              <a href="tel:+917356956837" className="font-semibold text-white hover:text-slate-200">+91 735 695 6837</a>
+              <a href="tel:+919633152828" className="font-semibold text-white hover:text-slate-200">+91 963 315 2828</a>
             </div>
           </div>
 

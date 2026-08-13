@@ -52,10 +52,17 @@ h1, h2, h3, h4, h5, h6 {
 /* ────────────────────────────────────────────────
    HARDWARE ACCELERATED SMOOTH SCROLLING & CARDS
 ──────────────────────────────────────────────── */
-.glass-card, .border-glow-card, section {
-  will-change: transform, opacity;
+/* PERF: Only apply will-change to cards that actually animate on hover/interaction.
+   Applying it to ALL sections wastes GPU memory on static elements. */
+.glass-card, .border-glow-card {
+  will-change: transform;
   transform: translateZ(0);
   backface-visibility: hidden;
+}
+
+/* PERF: Contain layout recalc within the horizontal scroll section */
+.horizontal-services-section {
+  contain: layout style;
 }
 
 /* ────────────────────────────────────────────────

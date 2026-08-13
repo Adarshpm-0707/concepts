@@ -71,6 +71,10 @@ const CursorGrid = ({
     let raf = 0;
     let running = false;
     let lastFrame = 0;
+    // PERF: rAF gate for pointermove — only energize once per animation frame
+    let moveRaf = 0;
+    let pendingMoveX = 0;
+    let pendingMoveY = 0;
 
     const rebuild = () => {
       const p = propsRef.current;
@@ -232,9 +236,17 @@ const CursorGrid = ({
     };
 
     const onPointerMove = e => {
+      // PERF: Store latest position but only process on next rAF tick
       const [x, y] = toLocal(e);
-      energize(x, y);
-      wake();
+      pendingMoveX = x;
+      pendingMoveY = y;
+      if (!moveRaf) {
+        moveRaf = requestAnimationFrame(() => {
+          moveRaf = 0;
+          energize(pendingMoveX, pendingMoveY);
+          wake();
+        });
+      }
     };
 
     const onPointerDown = e => {
@@ -258,6 +270,7 @@ const CursorGrid = ({
 
     return () => {
       cancelAnimationFrame(raf);
+      if (moveRaf) cancelAnimationFrame(moveRaf);
       ro.disconnect();
       window.removeEventListener('pointermove', onPointerMove);
       window.removeEventListener('pointerdown', onPointerDown);

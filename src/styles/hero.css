@@ -33,3 +33,13 @@
 .origin-left {
   transform-origin: left;
 }
+
+/* ── Hero Ambient Glow — pure CSS, zero JS (replaces Framer Motion infinite animation) ── */
+@keyframes hero-glow-pulse {
+  0%, 100% { transform: scale(1);   opacity: 0.3; }
+  50%       { transform: scale(1.2); opacity: 0.5; }
+}
+.hero-ambient-glow {
+  animation: hero-glow-pulse 10s ease-in-out infinite;
+  will-change: transform, opacity;
+}

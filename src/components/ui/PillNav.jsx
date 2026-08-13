@@ -3,20 +3,7 @@ import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import './PillNav.css';
 
-// Route chunk prefetch map for instantaneous 0ms route transitions
-const pagePrefetchMap = {
-  '/': () => import('../../pages/Home'),
-  '/about': () => import('../../pages/AboutPage'),
-  '/services': () => import('../../pages/ServicesPage'),
-  '/portfolio': () => import('../../pages/PortfolioPage'),
-  '/contact': () => import('../../pages/ContactPage'),
-};
-
-const prefetchRoute = (href) => {
-  if (href && pagePrefetchMap[href]) {
-    pagePrefetchMap[href]().catch(() => {});
-  }
-};
+const prefetchRoute = () => {};
 
 const PillNav = ({
   logo,

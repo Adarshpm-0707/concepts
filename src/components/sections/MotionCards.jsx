@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Heart, ArrowUpRight, X, Sparkles, MapPin, ExternalLink } from 'lucide-react';
+import { Heart, ArrowUpRight, X, Sparkles, ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react';
 import '../../styles/motion-cards.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -121,11 +121,15 @@ export default function MotionCards() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState("All");
-  const [lightboxProject, setLightboxProject] = useState(null);
+  const [lightboxIndex, setLightboxIndex] = useState(null);
 
-  // Lock body scroll when modal is open
+  const filteredProjects = activeCategory === "All" 
+    ? allProjectsData 
+    : allProjectsData.filter((p) => p.category === activeCategory);
+
+  // Lock body scroll when modal or lightbox is open
   useEffect(() => {
-    if (isModalOpen || lightboxProject) {
+    if (isModalOpen || lightboxIndex !== null) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -133,22 +137,26 @@ export default function MotionCards() {
     return () => {
       document.body.style.overflow = '';
     };
-  }, [isModalOpen, lightboxProject]);
+  }, [isModalOpen, lightboxIndex]);
 
-  // Escape key handler
+  // Keyboard navigation (Escape, Left, Right)
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape') {
-        if (lightboxProject) {
-          setLightboxProject(null);
-        } else if (isModalOpen) {
-          setIsModalOpen(false);
+      if (lightboxIndex !== null) {
+        if (e.key === 'Escape') {
+          setLightboxIndex(null);
+        } else if (e.key === 'ArrowRight') {
+          setLightboxIndex((prev) => (prev + 1) % filteredProjects.length);
+        } else if (e.key === 'ArrowLeft') {
+          setLightboxIndex((prev) => (prev - 1 + filteredProjects.length) % filteredProjects.length);
         }
+      } else if (isModalOpen && e.key === 'Escape') {
+        setIsModalOpen(false);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isModalOpen, lightboxProject]);
+  }, [isModalOpen, lightboxIndex, filteredProjects.length]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -280,10 +288,6 @@ export default function MotionCards() {
     return () => ctx.revert();
   }, []);
 
-  const filteredProjects = activeCategory === "All" 
-    ? allProjectsData 
-    : allProjectsData.filter((p) => p.category === activeCategory);
-
   return (
     <>
       <section ref={sectionRef} className="motion-card-section" id="motion-card-section">
@@ -392,7 +396,7 @@ export default function MotionCards() {
         </div>
       </section>
 
-      {/* ─── ALL PROJECTS GALLERY MODAL ─── */}
+      {/* ─── REDESIGNED HIGH-END CREATIVE GALLERY MODAL ─── */}
       {isModalOpen && (
         <div className="motion-projects-modal-backdrop" data-lenis-prevent onClick={() => setIsModalOpen(false)}>
           <div 
@@ -400,15 +404,39 @@ export default function MotionCards() {
             data-lenis-prevent
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Modal Header */}
+            {/* Redesigned Modal Glass Header */}
             <div className="motion-modal-header">
-              <div className="motion-modal-title-wrap">
-                <div className="inline-flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-widest">
-                  <Sparkles className="w-3.5 h-3.5 text-white" />
-                  <span>Aleef Concepts Gallery</span>
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-pink-500 via-purple-500 to-orange-500 p-[1.5px] flex items-center justify-center shadow-lg shadow-pink-500/20">
+                  <div className="w-full h-full bg-black rounded-full flex items-center justify-center">
+                    <Sparkles className="w-4 h-4 text-pink-400" />
+                  </div>
                 </div>
-                <h3 className="motion-modal-title">All Featured Creative Works</h3>
+                <div>
+                  <h3 className="motion-modal-title">Creative Works Gallery</h3>
+                  <p className="text-[11px] sm:text-xs text-slate-400 font-medium">
+                    {filteredProjects.length} Featured Visual Posters
+                  </p>
+                </div>
               </div>
+
+              {/* Desktop Category Filters */}
+              <div className="hidden md:flex items-center gap-1.5 bg-neutral-900/90 p-1.5 rounded-full border border-white/10 shadow-inner">
+                {categories.map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => setActiveCategory(cat)}
+                    className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-300 cursor-pointer ${
+                      activeCategory === cat
+                        ? 'bg-white text-black font-bold shadow-md scale-105'
+                        : 'text-slate-400 hover:text-white hover:bg-neutral-800'
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+
               <button 
                 onClick={() => setIsModalOpen(false)}
                 className="motion-modal-close-btn"
@@ -418,40 +446,42 @@ export default function MotionCards() {
               </button>
             </div>
 
-            {/* Modal Body */}
-            <div className="motion-modal-body" data-lenis-prevent>
-              {/* Category Filters */}
-              <div className="motion-modal-filter-tabs">
-                {categories.map((cat) => (
-                  <button
-                    key={cat}
-                    onClick={() => setActiveCategory(cat)}
-                    className={`motion-modal-filter-btn${activeCategory === cat ? ' is-active' : ''}`}
-                  >
-                    {cat}
-                  </button>
-                ))}
-              </div>
+            {/* Mobile Category Filters */}
+            <div className="flex md:hidden items-center gap-2 p-3 bg-neutral-900/90 border-b border-white/10 overflow-x-auto no-scrollbar">
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setActiveCategory(cat)}
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-300 ${
+                    activeCategory === cat
+                      ? 'bg-white text-black font-bold shadow-md'
+                      : 'bg-neutral-800/80 text-slate-300 border border-white/10'
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
 
-              {/* Projects Grid */}
-              <div className="motion-modal-grid">
-                {filteredProjects.map((project) => (
+            {/* Modal Body - Pure Poster Grid */}
+            <div className="motion-modal-body" data-lenis-prevent>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+                {filteredProjects.map((project, idx) => (
                   <div
                     key={project.id}
-                    className="motion-project-grid-card"
-                    onClick={() => setLightboxProject(project)}
+                    className="relative w-full aspect-[4/5] bg-neutral-950 border border-white/10 hover:border-pink-500/50 rounded-2xl overflow-hidden shadow-2xl transition-all duration-300 group hover:shadow-pink-500/20 hover:-translate-y-1.5 cursor-pointer"
+                    onClick={() => setLightboxIndex(idx)}
                   >
-                    <div className="motion-project-img-wrapper">
-                      <img src={project.image} alt={project.title} loading="lazy" />
-                      <span className="motion-project-badge">{project.result}</span>
-                    </div>
-                    <div className="motion-project-info">
-                      <span className="motion-project-category">{project.category}</span>
-                      <h4 className="motion-project-title">{project.title}</h4>
-                      <div className="flex items-center gap-1 text-[0.7rem] text-slate-400 mt-1">
-                        <MapPin className="w-3 h-3" />
-                        <span>{project.location}</span>
-                      </div>
+                    <img
+                      src={project.image}
+                      alt="Creative poster"
+                      loading="lazy"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                      <span className="p-3 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white shadow-xl transform scale-90 group-hover:scale-100 transition-transform">
+                        <Maximize2 className="w-5 h-5" />
+                      </span>
                     </div>
                   </div>
                 ))}
@@ -461,30 +491,56 @@ export default function MotionCards() {
         </div>
       )}
 
-      {/* ─── FULLSCREEN LIGHTBOX PREVIEW MODAL ─── */}
-      {lightboxProject && (
-        <div className="motion-lightbox-backdrop" onClick={() => setLightboxProject(null)}>
-          <div className="motion-lightbox-content" onClick={(e) => e.stopPropagation()}>
+      {/* ─── FULLSCREEN LIGHTBOX PREVIEW MODAL WITH NAV ARROWS ─── */}
+      {lightboxIndex !== null && filteredProjects[lightboxIndex] && (
+        <div className="motion-lightbox-backdrop" onClick={() => setLightboxIndex(null)}>
+          {/* Close Button */}
+          <button
+            onClick={() => setLightboxIndex(null)}
+            className="motion-lightbox-close"
+            aria-label="Close lightbox preview"
+          >
+            <X className="w-5 h-5" />
+          </button>
+
+          {/* Previous Button */}
+          {filteredProjects.length > 1 && (
             <button
-              onClick={() => setLightboxProject(null)}
-              className="motion-lightbox-close"
-              aria-label="Close lightbox preview"
+              onClick={(e) => {
+                e.stopPropagation();
+                setLightboxIndex((prev) => (prev - 1 + filteredProjects.length) % filteredProjects.length);
+              }}
+              className="fixed left-4 sm:left-8 top-1/2 -translate-y-1/2 z-[10002] w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white flex items-center justify-center transition-all hover:scale-110 shadow-2xl cursor-pointer"
+              aria-label="Previous image"
             >
-              <X className="w-5 h-5" />
+              <ChevronLeft className="w-6 h-6" />
             </button>
+          )}
+
+          {/* Lightbox Image Container */}
+          <div className="motion-lightbox-content" onClick={(e) => e.stopPropagation()}>
             <img
-              src={lightboxProject.image}
-              alt={lightboxProject.title}
-              className="motion-lightbox-img"
+              src={filteredProjects[lightboxIndex].image}
+              alt="Creative poster artwork"
+              className="motion-lightbox-img max-h-[85vh] rounded-2xl shadow-2xl border border-white/10 object-contain"
             />
-            <div className="motion-lightbox-caption">
-              <h3>{lightboxProject.title}</h3>
-              <p>{lightboxProject.category} • {lightboxProject.location} • {lightboxProject.result}</p>
-            </div>
           </div>
+
+          {/* Next Button */}
+          {filteredProjects.length > 1 && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setLightboxIndex((prev) => (prev + 1) % filteredProjects.length);
+              }}
+              className="fixed right-4 sm:right-8 top-1/2 -translate-y-1/2 z-[10002] w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white flex items-center justify-center transition-all hover:scale-110 shadow-2xl cursor-pointer"
+              aria-label="Next image"
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
+          )}
         </div>
       )}
     </>
   );
 }
-

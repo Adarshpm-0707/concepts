@@ -3,8 +3,6 @@ import Hero from "../components/sections/Hero";
 import About from "../components/sections/About";
 import WhyChooseUs from "../components/sections/WhyChooseUs";
 import Services from "../components/sections/Services";
-import PortfolioIntro from "../components/sections/PortfolioIntro";
-import Testimonials from "../components/sections/Testimonials";
 import FAQ from "../components/sections/FAQ";
 import Contact from "../components/sections/Contact";
 
@@ -12,12 +10,10 @@ export default function Home() {
   return (
     <div className="bg-black text-white relative w-full overflow-x-hidden">
       <Hero />
-      <About />
+      <About isHomePage={true} />
       <WhyChooseUs />
       <Services />
-      <Testimonials />
       <FAQ />
-  
       <Contact />
     </div>
   );
