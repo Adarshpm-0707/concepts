@@ -32,9 +32,6 @@ const PillNav = ({
   const logoRef = useRef(null);
 
   useEffect(() => {
-    // Eagerly prefetch all main route chunks on nav mount so clicking any link is instantaneous!
-    Object.values(pagePrefetchMap).forEach(loader => loader().catch(() => {}));
-
     const layout = () => {
       circleRefs.current.forEach(circle => {
         if (!circle?.parentElement) return;

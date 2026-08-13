@@ -15,6 +15,7 @@ import ServicesPage from './pages/ServicesPage';
 import ServiceDetailPage from './pages/ServiceDetailPage';
 import PortfolioPage from './pages/PortfolioPage';
 import ContactPage from './pages/ContactPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -114,6 +115,7 @@ function AnimatedRoutes() {
           <Route path="/services/:serviceId"   element={<ServiceDetailPage />} />
           <Route path="/portfolio"             element={<PortfolioPage />} />
           <Route path="/contact"               element={<ContactPage />} />
+          <Route path="*"                      element={<NotFoundPage />} />
         </Routes>
       </motion.div>
     </AnimatePresence>
