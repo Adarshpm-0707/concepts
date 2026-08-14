@@ -1,13 +1,34 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, Phone, Mail, Clock, Send, MessageSquare, CheckCircle2, Sparkles } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, Send, MessageSquare, CheckCircle2, Sparkles, Loader2, AlertCircle, RefreshCw, ShieldCheck } from 'lucide-react';
+import emailjs from '@emailjs/browser';
 import SectionHeading from '../common/SectionHeading';
 import Button from '../common/Button';
 import CurvedInput from '../ui/CurvedInput';
 import { brandData } from '../../data/content';
 
+// EmailJS Account Credentials
+const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || 'service_5a6p9hg';
+const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'template_zvm17qh';
+const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || '5ri7rXdvREiav4hZ7';
+
+// XSS Sanitizer & Input Length Guard
+const sanitize = (str = '') => {
+  if (typeof str !== 'string') return '';
+  return str
+    .replace(/<[^>]*>?/gm, '') // Strip HTML tags
+    .trim()
+    .slice(0, 2000); // Length cap
+};
+
 export default function Contact() {
+  const formRef = useRef();
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [honeypot, setHoneypot] = useState('');
+  const [lastSubmitTime, setLastSubmitTime] = useState(0);
+
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -16,9 +37,118 @@ export default function Contact() {
     message: ''
   });
 
-  const handleSubmit = (e) => {
+  // Initialize EmailJS SDK once when component mounts
+  useEffect(() => {
+    try {
+      emailjs.init({ publicKey: PUBLIC_KEY });
+    } catch (err) {
+      console.warn('EmailJS init warning:', err);
+    }
+  }, []);
+
+  const handleSubmit = async (e) => {
     if (e?.preventDefault) e.preventDefault();
-    setSubmitted(true);
+    setErrorMessage('');
+
+    // Honeypot Bot Check
+    if (honeypot.trim() !== '') {
+      // Silently fool bots without sending real email
+      setSubmitted(true);
+      return;
+    }
+
+    // Anti-Spam Cooldown Guard (10 seconds between submissions)
+    const now = Date.now();
+    if (now - lastSubmitTime < 10000) {
+      setErrorMessage('Please wait a few seconds before submitting another request.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    setLastSubmitTime(now);
+
+    const sanitizedParams = {
+      user_name: sanitize(formData.name),
+      phone_number: sanitize(formData.phone),
+      user_email: sanitize(formData.email),
+      service_required: sanitize(formData.service),
+      project_details: sanitize(formData.message),
+      reply_to: sanitize(formData.email)
+    };
+
+    try {
+      let res;
+      try {
+        res = await emailjs.send(SERVICE_ID, TEMPLATE_ID, sanitizedParams, { publicKey: PUBLIC_KEY });
+      } catch (sendErr) {
+        console.warn('emailjs.send failed, trying sendForm fallback...', sendErr);
+        if (formRef.current) {
+          res = await emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, formRef.current, { publicKey: PUBLIC_KEY });
+        } else {
+          throw sendErr;
+        }
+      }
+
+      console.log('EmailJS response success:', res);
+      setSubmitted(true);
+      setFormData({
+        name: '',
+        phone: '',
+        email: '',
+        service: 'Digital Marketing & SEO',
+        message: ''
+      });
+    } catch (error) {
+      console.error('EmailJS Submit Error:', error);
+      const detail = error?.text || error?.message || (typeof error === 'string' ? error : JSON.stringify(error));
+      const statusPrefix = error?.status ? `(Status ${error.status}) ` : '';
+      setErrorMessage(`EmailJS Error ${statusPrefix}: ${detail}`);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleQuickStrategySubmit = async (val) => {
+    if (!val) return;
+    setErrorMessage('');
+    const cleanEmail = sanitize(val);
+    setFormData((prev) => ({ ...prev, email: cleanEmail }));
+    setIsSubmitting(true);
+
+    const templateParams = {
+      user_name: 'Strategy Lead',
+      phone_number: 'N/A (Quick Strategy Bar)',
+      user_email: cleanEmail,
+      service_required: 'Instant Strategy Proposal',
+      project_details: 'Lead requested a strategy proposal via the quick email bar.',
+      reply_to: cleanEmail
+    };
+
+    try {
+      const res = await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, { publicKey: PUBLIC_KEY });
+      console.log('EmailJS Quick Strategy success:', res);
+      setSubmitted(true);
+    } catch (error) {
+      console.error('EmailJS Quick Strategy Error:', error);
+      const detail = error?.text || error?.message || (typeof error === 'string' ? error : JSON.stringify(error));
+      const statusPrefix = error?.status ? `(Status ${error.status}) ` : '';
+      setErrorMessage(`EmailJS Error ${statusPrefix}: ${detail}`);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleReset = () => {
+    setSubmitted(false);
+    setErrorMessage('');
+    setHoneypot('');
+    setFormData({
+      name: '',
+      phone: '',
+      email: '',
+      service: 'Digital Marketing & SEO',
+      message: ''
+    });
   };
 
   return (
@@ -51,7 +181,7 @@ export default function Contact() {
           <div className="w-full flex justify-center overflow-visible">
             <CurvedInput
               placeholder="Enter your email for strategy proposal..."
-              buttonText="Get Strategy"
+              buttonText={isSubmitting ? "Sending..." : "Get Strategy"}
               theme="dark"
               bend={18}
               height={62}
@@ -65,18 +195,13 @@ export default function Contact() {
               buttonTextColor="#000000"
               shadowSize="lg"
               shadowColor="#000000"
-              onSubmit={(val) => {
-                if (val) {
-                  setFormData((prev) => ({ ...prev, email: val }));
-                  setSubmitted(true);
-                }
-              }}
+              onSubmit={(val) => handleQuickStrategySubmit(val)}
             />
           </div>
         </motion.div>
 
         {/* --- MAIN CONTACT SECTION GRID --- */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-10 items-stretch">
+        <div id="contact-form-container" className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-10 items-stretch">
           
           {/* Left Column: Office Contact Info Card */}
           <motion.div
@@ -166,7 +291,7 @@ export default function Contact() {
             </div>
           </motion.div>
 
-          {/* Right Column: Contact Form Card (Fully Aligned Form Controls) */}
+          {/* Right Column: Contact Form Card */}
           <motion.div
             initial={{ opacity: 0, x: 25 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -187,16 +312,46 @@ export default function Contact() {
                   </p>
                 </div>
 
+                {errorMessage && (
+                  <div className="mb-6 p-4 rounded-xl bg-rose-950/80 border border-rose-500/40 text-rose-200 text-xs sm:text-sm flex items-start gap-3">
+                    <AlertCircle className="w-5 h-5 text-rose-400 shrink-0 mt-0.5" />
+                    <div className="flex-1">
+                      <p className="font-semibold">{errorMessage}</p>
+                    </div>
+                  </div>
+                )}
+
                 {submitted ? (
                   <div className="py-12 px-6 sm:px-8 rounded-2xl bg-neutral-900/90 border border-white/20 text-center space-y-4 my-auto">
                     <CheckCircle2 className="w-12 h-12 sm:w-14 sm:h-14 text-emerald-400 mx-auto animate-bounce" />
                     <h4 className="text-lg sm:text-xl font-bold text-white font-heading">Message Sent Successfully!</h4>
                     <p className="text-xs sm:text-sm text-slate-300 max-w-md mx-auto leading-relaxed">
-                      Thank you for reaching out to Aleef Concepts. Our Kannur office team will review your project details and contact you shortly.
+                      Thank you for reaching out to Aleef Concepts. Our Kannur office team has received your message and will review your details shortly.
                     </p>
+                    <div className="pt-4">
+                      <button
+                        onClick={handleReset}
+                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-white font-medium text-xs sm:text-sm border border-white/20 transition-all cursor-pointer"
+                      >
+                        <RefreshCw className="w-4 h-4" />
+                        <span>Send Another Message</span>
+                      </button>
+                    </div>
                   </div>
                 ) : (
-                  <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
+                  <form ref={formRef} onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
+                    
+                    {/* Honeypot Bot Trap Field (Hidden from real users, tricks spam bots) */}
+                    <input
+                      type="text"
+                      name="website_url_hp"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      value={honeypot}
+                      onChange={(e) => setHoneypot(e.target.value)}
+                      className="hidden opacity-0 pointer-events-none absolute -z-50 w-0 h-0"
+                      aria-hidden="true"
+                    />
                     
                     {/* Row 1: Name & Phone */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -206,11 +361,13 @@ export default function Contact() {
                         </label>
                         <input
                           type="text"
+                          name="user_name"
                           required
                           placeholder="e.g. Muhammed Ali"
                           value={formData.name}
                           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                          className="w-full px-4 py-3 rounded-xl bg-neutral-900/90 border border-white/15 text-white text-xs sm:text-sm focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-all placeholder:text-slate-500 font-medium"
+                          disabled={isSubmitting}
+                          className="w-full px-4 py-3 rounded-xl bg-neutral-900/90 border border-white/15 text-white text-xs sm:text-sm focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-all placeholder:text-slate-500 font-medium disabled:opacity-50"
                         />
                       </div>
 
@@ -220,11 +377,13 @@ export default function Contact() {
                         </label>
                         <input
                           type="tel"
+                          name="phone_number"
                           required
                           placeholder="+91 98765 43210"
                           value={formData.phone}
                           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                          className="w-full px-4 py-3 rounded-xl bg-neutral-900/90 border border-white/15 text-white text-xs sm:text-sm focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-all placeholder:text-slate-500 font-medium"
+                          disabled={isSubmitting}
+                          className="w-full px-4 py-3 rounded-xl bg-neutral-900/90 border border-white/15 text-white text-xs sm:text-sm focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-all placeholder:text-slate-500 font-medium disabled:opacity-50"
                         />
                       </div>
                     </div>
@@ -237,11 +396,13 @@ export default function Contact() {
                         </label>
                         <input
                           type="email"
+                          name="user_email"
                           required
                           placeholder="name@business.com"
                           value={formData.email}
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                          className="w-full px-4 py-3 rounded-xl bg-neutral-900/90 border border-white/15 text-white text-xs sm:text-sm focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-all placeholder:text-slate-500 font-medium"
+                          disabled={isSubmitting}
+                          className="w-full px-4 py-3 rounded-xl bg-neutral-900/90 border border-white/15 text-white text-xs sm:text-sm focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-all placeholder:text-slate-500 font-medium disabled:opacity-50"
                         />
                       </div>
 
@@ -251,9 +412,11 @@ export default function Contact() {
                         </label>
                         <div className="relative">
                           <select
+                            name="service_required"
                             value={formData.service}
                             onChange={(e) => setFormData({ ...formData, service: e.target.value })}
-                            className="w-full px-4 py-3 rounded-xl bg-neutral-900/90 border border-white/15 text-white text-xs sm:text-sm focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-all cursor-pointer font-medium appearance-none"
+                            disabled={isSubmitting}
+                            className="w-full px-4 py-3 rounded-xl bg-neutral-900/90 border border-white/15 text-white text-xs sm:text-sm focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-all cursor-pointer font-medium appearance-none disabled:opacity-50"
                           >
                             <option value="Digital Marketing & SEO" className="bg-neutral-900 text-white">Digital Marketing & SEO</option>
                             <option value="Performance Ads (Meta & Google)" className="bg-neutral-900 text-white">Performance Ads (Meta & Google)</option>
@@ -275,12 +438,14 @@ export default function Contact() {
                         Project Details <span className="text-pink-400">*</span>
                       </label>
                       <textarea
+                        name="project_details"
                         rows={4}
                         required
                         placeholder="Briefly describe your business goals and requirements..."
                         value={formData.message}
                         onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl bg-neutral-900/90 border border-white/15 text-white text-xs sm:text-sm focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-all placeholder:text-slate-500 font-medium resize-none"
+                        disabled={isSubmitting}
+                        className="w-full px-4 py-3 rounded-xl bg-neutral-900/90 border border-white/15 text-white text-xs sm:text-sm focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-all placeholder:text-slate-500 font-medium resize-none disabled:opacity-50"
                       />
                     </div>
 
@@ -288,10 +453,11 @@ export default function Contact() {
                     <div className="pt-2">
                       <Button
                         type="submit"
-                        text="Send Message to Kannur Office"
+                        text={isSubmitting ? "Sending Message..." : "Send Message to Kannur Office"}
                         variant="primary"
-                        icon={Send}
-                        className="w-full py-3.5 sm:py-4 cursor-pointer"
+                        icon={isSubmitting ? Loader2 : Send}
+                        disabled={isSubmitting}
+                        className="w-full py-3.5 sm:py-4 cursor-pointer disabled:cursor-not-allowed"
                       />
                     </div>
 
@@ -307,3 +473,5 @@ export default function Contact() {
     </section>
   );
 }
+
+
