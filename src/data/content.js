@@ -58,7 +58,7 @@ export const aboutData = {
 
 export const whyChooseUsData = {
   eyebrow: "Built Different",
-  title: "Why Companies Choose Aleef Concepts",
+  title: "Why Companies Choose\nAleef Concepts",
   subtitle: "We replace fragmented vendor chaos with unified execution that produces enquiries, sales, and long-term brand authority.",
   items: [
     {

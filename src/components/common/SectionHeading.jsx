@@ -19,11 +19,11 @@ export default function SectionHeading({
       {title && (
         <>
           {/* Mobile title */}
-          <h2 className="block sm:hidden text-[1.55rem] font-extrabold font-heading text-white tracking-tight leading-[1.2]">
+          <h2 className="block sm:hidden text-[1.55rem] font-extrabold font-heading text-white tracking-tight leading-[1.2] whitespace-pre-line">
             {title}
           </h2>
           {/* Desktop title */}
-          <h2 className="hidden sm:block text-4xl lg:text-5xl font-extrabold font-heading text-white tracking-tight leading-snug sm:leading-[1.15]">
+          <h2 className="hidden sm:block text-4xl lg:text-5xl font-extrabold font-heading text-white tracking-tight leading-snug sm:leading-[1.15] whitespace-pre-line">
             {title}
           </h2>
         </>
