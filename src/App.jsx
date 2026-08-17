@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
+import Preloader from './components/common/Preloader';
 
 // Direct static page imports for instant load on refresh without loading spinners
 import Home from './pages/Home';
@@ -123,8 +124,18 @@ function AnimatedRoutes() {
 }
 
 export default function App() {
+  const [loading, setLoading] = useState(true);
+
+  const handlePreloaderComplete = () => {
+    setLoading(false);
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 100);
+  };
+
   return (
     <BrowserRouter>
+      {loading && <Preloader onComplete={handlePreloaderComplete} />}
       <SmoothScroll />
 
       <div className="relative min-h-screen text-slate-100 font-sans selection:bg-white selection:text-black flex flex-col overflow-x-hidden bg-black">
