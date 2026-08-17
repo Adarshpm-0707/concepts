@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, Phone, Mail, Clock, Send, MessageSquare, CheckCircle2, Sparkles, Loader2, AlertCircle, RefreshCw, ShieldCheck } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, Send, MessageSquare, CheckCircle2, Sparkles, Loader2, AlertCircle, RefreshCw, ShieldCheck, Instagram, Facebook, Twitter, Youtube, Share2 } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 import SectionHeading from '../common/SectionHeading';
 import Button from '../common/Button';
@@ -20,6 +20,14 @@ const sanitize = (str = '') => {
     .trim()
     .slice(0, 2000); // Length cap
 };
+
+const XIcon = ({ className = "w-4 h-4" }) => (
+  <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
+    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+  </svg>
+);
+
+const socialIconMap = { Instagram, Facebook, Twitter: XIcon, Youtube, X: XIcon };
 
 export default function Contact() {
   const formRef = useRef();
@@ -287,6 +295,33 @@ export default function Contact() {
                   <span>Chat on WhatsApp Directly</span>
                 </a>
               </div>
+
+              {/* Social Media Links */}
+              {brandData.socials && brandData.socials.length > 0 && (
+                <div className="pt-4 border-t border-white/15">
+                  <div className="text-[10px] sm:text-xs uppercase tracking-wider font-bold text-slate-400 mb-2.5">
+                    Follow Us On Social Media
+                  </div>
+                  <div className="flex items-center gap-3">
+                    {brandData.socials.map((social, idx) => {
+                      const Icon = socialIconMap[social.icon] || Share2;
+                      return (
+                        <a
+                          key={idx}
+                          href={social.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-neutral-900 border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-black transition-all duration-300 active:scale-95"
+                          aria-label={social.name}
+                          title={social.name}
+                        >
+                          <Icon className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
+                        </a>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
 
             </div>
           </motion.div>

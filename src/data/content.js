@@ -16,9 +16,10 @@ export const brandData = {
   officeHours: "Mon - Sat: 9:00 AM - 6:30 PM",
   googleMapsEmbed: "https://maps.google.com/?q=Kannur,Kerala",
   socials: [
-    { name: "Instagram", href: "https://instagram.com", icon: "Instagram" },
-    { name: "LinkedIn", href: "https://linkedin.com", icon: "Linkedin" },
-    { name: "Facebook", href: "https://facebook.com", icon: "Facebook" }
+    { name: "YouTube", href: "https://www.youtube.com/@AleefConcepts", icon: "Youtube" },
+    { name: "Instagram", href: "https://www.instagram.com/aleefconcepts", icon: "Instagram" },
+    { name: "Facebook", href: "https://www.facebook.com/profile.php?id=61559482516544", icon: "Facebook" },
+    { name: "X", href: "https://x.com/aleefconcepts", icon: "X" }
   ]
 };
 
